@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 class TorrentInfo {
 
@@ -16,39 +17,65 @@ class TorrentInfo {
 		Blex lexTree = new Blex(fileName);
 		announceList = new ArrayList<String>();
 		infoHash = new byte[20]; 
-		TokenElement[] tokenArray = new TokenElement[lexTree.tokenList.size()];
 		
-		lexTree.tokenList.toArray(tokenArray);
-		setInfo(tokenArray);
+		setInfo(lexTree.tokenList);
 	}
 
-	private void setInfo(TokenElement[] tokenArray) {
+	private void setInfo(ArrayList<TokenElement> tokenArray) {
 		
-		for(int i = 0; i < tokenArray.length; i++) {
+		for(int i = 0; i < tokenArray.size(); i++) {
 			
-			String str = tokenArray[i].getValueString();
+			String str = tokenArray.get(i).getValueString();
 			
 			if (str != null && str.equals("announce") == true) {
 				
-				System.out.print(tokenArray[i + 1].type);
-				System.out.print(" = " + tokenArray[i + 1].getValueString() + "\n");
+				i++;
+				this.announce = tokenArray.get(i).getValueString();
 			
 			} else if (str != null && str.equals("created by") == true) {
 				
-				System.out.print(tokenArray[i + 1].type);
-				System.out.print(" = " + tokenArray[i + 1].getValueString() + "\n");
+				i++;
+				this.createdBy = tokenArray.get(i).getValueString();
 			
-			}  else if (str != null && str.equals("creation date") == true) {
+			} else if (str != null && str.equals("creation date") == true) {
 				
-				System.out.print(tokenArray[i + 1].type);
-				System.out.print(" = " + tokenArray[i + 1].getValueString() + "\n");
+				i++;
+				this.creationDate = tokenArray.get(i).getValueString();
 			
-			}  else if (str != null && str.equals("comment") == true) {
+			} else if (str != null && str.equals("comment") == true) {
 				
-				System.out.print(tokenArray[i + 1].type);
-				System.out.print(" = " + tokenArray[i + 1].getValueString() + "\n");
-			}
+				i++;
+				this.comment = tokenArray.get(i).getValueString();
+			
+			} else if (str != null && str.equals("encoding") == true) {
+				
+				i++;
+				this.encoding = tokenArray.get(i).getValueString();
 
+			} else if (str != null && str.equals("announce-list") == true) {
+				
+				i++;
+				ArrayDeque<TokenElement> announceStack = new ArrayDeque<TokenElement>();		
+				announceStack.push(tokenArray.get(i));
+
+				while (announceStack.isEmpty() != true) {
+					
+					i++;
+
+					if (tokenArray.get(i).type == TokenElement.Token.END) {
+						
+						announceStack.pop();
+
+					} else if (tokenArray.get(i).type == TokenElement.Token.LIST) {
+						
+						announceStack.push(tokenArray.get(i));
+
+					} else if (tokenArray.get(i).type == TokenElement.Token.BYTESTRING) {
+						
+						this.announceList.add(tokenArray.get(i).getValueString());
+					}
+				}
+			}
 		}
 	}
 }
