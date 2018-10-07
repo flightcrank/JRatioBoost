@@ -3,65 +3,40 @@
 //JDK 7 or above
 
 import java.io.*;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.ArrayDeque;
 import java.nio.channels.FileChannel;
 
-//object to represent a bencoded token type and value
-class TokenElement {
-
-	public enum Token {
-
-		BYTESTRING, INTEGER, LIST, DICTIONARY, END;
-	}
-	
-	Token type;	//the type of token encountered
-	byte value[];	//the value (if any) associated with a INTEGER or BYTESTRING token
-	long position;	//the byte offset position in the file the token was found at
-	int endIndex;	//DICTIONARY, LIST, BYESTESTRING and INTEGER tokens will hold the array index on their END token. END tokens will hold the index of the calling tokens
-
-	public String getValueString() {
-		
-		if (value != null) {
-			
-			String str = new String(value);
-
-			if (str.matches(".+")) {
-
-				return str;
-			}
-		}
-
-		return null;
-	}
-}
-
-//a class to lexically scan a bencoded file 
+//a class to lexically scan a bencoded file and store the tokens and their values in an ArrayList 
 class Blex {
 	
-	//instance elements
 	ArrayList<TokenElement> tokenList; //array of all token elements and data
-	boolean valid; //if true all DICTIONARY, LIST and INTEGER tokens have an END token
 	
-	//constructor
-	public Blex(String fileName) {
+	Blex(String fileName) {
 		
 		tokenList = new ArrayList<TokenElement>();
-		valid = false;
-		this.readFile(fileName);
+		boolean valid = this.readFile(fileName);
+
+		if (!valid) {
+
+			System.out.println("Invalid torrent file: " + fileName);
+
+		} else {
+		
+			System.out.println(fileName + ": validated");	
+		}
 	}
 	
 	//open and process the bencoded file 
-	private void readFile(String fileName) {
+	private boolean readFile(String fileName) {
 	
-		int fileIndex; 				//store the current byte read from a file
+		int fileIndex; 	//store the current byte read from a file
 		StringBuffer len = new StringBuffer();  //store a string of numbers to represent the INTEGER token value or the BYTESTRING length
+		ArrayDeque<Integer> stack = new ArrayDeque<Integer>();//object to track that all the required tokens have a END token
 		
 		try (FileInputStream file = new FileInputStream(fileName)) {
 			
 			FileChannel fChan = file.getChannel(); //object to obtain offset current position within the file
-			ArrayDeque<Integer> stack = new ArrayDeque<Integer>();
 
 			do {
 				
@@ -101,7 +76,6 @@ class Blex {
 					stack.push(tokenList.size() - 1);//subtract 1 to get the index number not the size of an array
 				
 				//END token found
-
 				} else if (fileIndex == (int) 'e') {
 				
 					TokenElement token = new TokenElement();
@@ -141,7 +115,7 @@ class Blex {
 					TokenElement token = new TokenElement();
 					
 					token.type = TokenElement.Token.BYTESTRING;
-					token.position = 1 + fChan.position(); //add 1 to position to accountfor the first char of the BYTESTRING not ':'
+					token.position = fChan.position();
 					fileIndex = file.read(byteStr);
 					token.value = byteStr;
 					this.tokenList.add(token);
@@ -149,17 +123,13 @@ class Blex {
 				}
 				
 			} while (fileIndex > -1);
-
-			if (stack.isEmpty()) {
-
-				valid = true;
-			}
-
+			
 		} catch (IOException e) {
 			
 			System.out.println("error: " + e);
 		}
-
-
+		
+		//validates the file. making sure all required tokens have a matching END token
+		return stack.isEmpty();
 	}
 }
