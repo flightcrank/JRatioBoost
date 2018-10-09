@@ -11,11 +11,12 @@ import java.nio.channels.FileChannel;
 class Blex {
 	
 	ArrayList<TokenElement> tokenList; //array of all token elements and data
-	
+	boolean valid = false;
+
 	Blex(String fileName) {
 		
 		tokenList = new ArrayList<TokenElement>();
-		boolean valid = this.readFile(fileName);
+		valid = this.readFile(fileName);
 
 		if (!valid) {
 
@@ -27,6 +28,11 @@ class Blex {
 		}
 	}
 	
+	public String toString() {
+		
+		return String.format("Blex: [valid=%b, num_tokens=%d]", valid, tokenList.size());
+	}
+
 	//open and process the bencoded file 
 	private boolean readFile(String fileName) {
 	
