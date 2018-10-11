@@ -11,6 +11,5 @@ class RatioBoost {
 		TrackerConnect tConn = new TrackerConnect(tInfo.announce, tInfo);
 
 		System.out.println(tConn);
-
 	}
 }
