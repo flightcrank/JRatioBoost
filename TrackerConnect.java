@@ -7,17 +7,59 @@ import java.util.ArrayList;
 //class to connect to a remore torrent tracker and issue HTML GET requests
 class TrackerConnect {
 	
-	URL tracker;
-	URLConnection conn;
 	String seeders;
 	String leechers;
 	String interval;
 	String minInterval;
+	TorrentInfo tInfo;
 
-	TrackerConnect(String url, TorrentInfo tInfo) {
+	TrackerConnect(TorrentInfo tInfo) {
 	
+		this.tInfo = tInfo;
+		connect();
+	}
+
+	//request to start a new torrent connection to tracker
+	public void connect() {
+		
+		URL tracker;
+		URLConnection conn = null;
 		String queryString = String.format("?info_hash=%s&peer_id=%s&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1));
-		String request = String.format("%s%s", url, queryString);
+		String request = String.format("%s%s", tInfo.announce, queryString);
+		
+		//connect to torrent tracker
+		try {
+			tracker = new URL(request);
+			conn = tracker.openConnection();
+		
+		} catch (MalformedURLException e) {
+
+			System.out.println("URL Error:" + e);		
+		
+		} catch (IOException e) {
+			
+			System.out.println("Connection Error:" + e);		
+		}
+	
+		if (conn != null) {
+
+			Blex blex = responce(conn);
+			
+			if (blex.valid) {
+				
+				setInfo(blex.tokenList);
+			}
+		}
+	}
+
+	//request to send upload and download data to tracker
+	public void connect(String uploaded, String downloaded) {
+	
+		URL tracker;
+		URLConnection conn = null;
+		String queryString = String.format("?info_hash=%s&peer_id=%s&port=6881&uploaded=%s&downloaded=%s&left=0&compact=1", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), uploaded, downloaded);
+		String request = String.format("%s%s", tInfo.announce, queryString);
+		System.out.println(request);
 		
 		//connect to torrent tracker
 		try {
@@ -33,14 +75,18 @@ class TrackerConnect {
 			System.out.println("Connection Error:" + e);		
 		}
 		
-		Blex blex = responce();
+		if (conn != null) {
 
-		if (blex.valid) {
+			Blex blex = responce(conn);
 			
-			setInfo(blex.tokenList);
+			if (blex.valid) {
+				
+				setInfo(blex.tokenList);
+			}
 		}
 	}
 	
+	//populate instace variables from the responce recieved from the tracker
 	private void setInfo(ArrayList<TokenElement> tokenList) {
 		
 		for (int i = 0; i <tokenList.size(); i++) {
@@ -69,7 +115,7 @@ class TrackerConnect {
 		}
 	}
 
-	private Blex responce() {
+	private Blex responce(URLConnection conn) {
 		
 		File tempFile;
 
@@ -115,7 +161,7 @@ class TrackerConnect {
 
 	public String toString() {
 	
-		return String.format("Tracker Connect: [%s,\n seeders:%s leechers:%s interval:%s min interval:%s]", tracker, seeders, leechers, interval, minInterval);
+		return String.format("Tracker Connect: [seeders:%s leechers:%s interval:%s min interval:%s]", seeders, leechers, interval, minInterval);
 	}
 }
 

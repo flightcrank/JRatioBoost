@@ -163,7 +163,6 @@ class TorrentInfo {
 				i++;
 				String num = tokenArray.get(i).getValueString();
 				size += Long.parseLong(num);
-				System.out.println(num +", "+size);
 
 			} else if (str != null && str.equals("announce-list")) {
 				
