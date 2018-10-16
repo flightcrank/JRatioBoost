@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import java.util.Date;
 import java.util.regex.*;
 import java.util.Timer;
@@ -27,9 +28,10 @@ public class JRatioBoost {
 	private JLabel downloaded;
 	private JLabel date;
 	private JPopupMenu menu;
+	private JMenuItem[] trackerList;
 	private JMenuItem about;
 	private JMenuItem updateInterval;
-	private JMenuItem changeTracker;
+	private JMenu changeTracker;
 	
 	long upAmount = 0;
 	TorrentInfo tInfo;
@@ -49,9 +51,10 @@ public class JRatioBoost {
 		menu = new JPopupMenu();
 		about = new JMenuItem("About");
 		updateInterval = new JMenuItem("Update Interval");
-		changeTracker = new JMenuItem("Tracker");
+		changeTracker = new JMenu("Tracker");
 		menu.add(changeTracker);
 		menu.add(updateInterval);
+		menu.addSeparator();
 		menu.add(about);
 		
 		// Add a listener for the popup trigger.
@@ -62,8 +65,31 @@ public class JRatioBoost {
 				if (me.isPopupTrigger()) {
 					
 					menu.show(me.getComponent(), me.getX(), me.getY());
-					System.out.println(menu.isBorderPainted());
 				}
+			}
+		});
+		
+		about.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				
+				About a = new About();
+				a.pack();
+				a.setLocationByPlatform(true);			
+				a.setVisible(true);
+			}
+		});
+		
+		updateInterval.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent actionEvent) {
+				
+				UpdateAmount ua = new UpdateAmount(tc);
+				ua.pack();
+				ua.setLocationByPlatform(true);			
+				ua.setVisible(true);
 			}
 		});
 	}
@@ -160,7 +186,7 @@ public class JRatioBoost {
 					
 					if (m.find()) {
 						
-						tracker.setText("<html><a href=\"\">" + m.group().substring(1) + "</a></html>");
+						tracker.setText("<html><a href=\"www.google.com\">" + m.group().substring(1) + "</a></html>");
 						tracker.setCursor(new Cursor(Cursor.HAND_CURSOR));
 						
 					} else {
@@ -174,6 +200,16 @@ public class JRatioBoost {
 					size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
 					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
 					date.setText(DateFormat.getDateInstance().format(d));
+					
+					int arrSize = tInfo.announceList.size();
+
+					if (arrSize > 0) {
+						
+						for (String val : tInfo.announceList) {
+						
+							changeTracker.add(val);
+						}
+					}
 				}
 			}
 		});
