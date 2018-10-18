@@ -37,191 +37,198 @@ public class JRatioBoost {
 	TorrentInfo tInfo;
 	TrackerConnect tc;
 	Timer timer;
-	
+
+
 	public JRatioBoost() {
 
-		//attach action listeners to buttons
-		//open button
-		openFile();
-		
-		//connect button
-		connect();
+		frame = new JFrame("JRatioBoost");
+		frame.setContentPane(panel1);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.pack();
+		frame.setVisible(true);
 		
 		//set up menu
 		menu = new JPopupMenu();
 		about = new JMenuItem("About");
 		updateInterval = new JMenuItem("Update Interval");
 		changeTracker = new JMenu("Tracker");
+		changeTracker.setEnabled(false);
 		menu.add(changeTracker);
 		menu.add(updateInterval);
 		menu.addSeparator();
 		menu.add(about);
 		
-		// Add a listener for the popup trigger.
-		panel1.addMouseListener(new MouseAdapter() {
-			
-			public void mousePressed(MouseEvent me) {
-				
-				if (me.isPopupTrigger()) {
-					
-					menu.show(me.getComponent(), me.getX(), me.getY());
-				}
-			}
-		});
-		
-		about.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				
-				About a = new About();
-				a.pack();
-				a.setLocationByPlatform(true);			
-				a.setVisible(true);
-			}
-		});
-		
-		updateInterval.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				
-				UpdateAmount ua = new UpdateAmount(tc);
-				ua.pack();
-				ua.setLocationByPlatform(true);			
-				ua.setVisible(true);
-			}
-		});
-	}
-	
-	//updates the tracker and gui with amount uploaded/downloaded
-	private void update() {
-		
-		timer = new Timer();
-		timer.scheduleAtFixedRate(new TimerTask() {
-			
-			@Override
-			public void run() {
-				
-				int upSpeed = (Integer) spinner1.getValue();
-				upAmount += upSpeed;
-				
-				//update GUI label with tracker response info
-				seeders.setText(tc.seeders);
-				leechers.setText(tc.leechers);
-				update.setText(tc.interval);
-				downloaded.setText("100%");
-				uploaded.setText(new SizeConvert(upAmount).toString());
-				
-				int nextUpdate = Integer.parseInt(update.getText());
-				
-				if (nextUpdate <= 0) {
-					
-					//stop the timer thread from executing to prevent the timer task
-					//from continuing to execute while the http request is being made
-					//by the TrackerConnect instance
-					timer.cancel();
-					
-					//send get request to tracker with upload/download data
-					tc.connect(String.format("%d", upAmount), "0");
-					nextUpdate = Integer.parseInt(tc.interval);
-					
-					//the new http request has been made, start a new timer task
-					update();
-				}
-				
-				nextUpdate--;
-				
-				tc.interval = String.format("%d", nextUpdate);
-			}
-		}, 1000, 1000);
-	}
-	
-	//connect to tracker
-	public void connect() {
-		
-		connectButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				
-				//connect button was pressed
-				if (connectButton.getText().equals("Connect")) {
-					
-					tc = new TrackerConnect(tInfo);
-					connectButton.setText("Stop");
-					connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
-					
-					//send request at regular intervals
-					update();
-					
-				//stop button was pressed
-				} else {
-					
-					connectButton.setText("Connect");
-					connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/computer.gif")));
-					timer.cancel();
-				}
-			}
-		});
-	}
-	
-	public void openFile() {
-		
-		openFileButton.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent actionEvent) {
-				
-				FileDialog fd = new FileDialog(frame, "Choose a file", FileDialog.LOAD);
-				fd.setFile("*.torrent");
-				fd.setVisible(true);
-			
-				if (fd.getFile() != null) {
-					
-					tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
-					//update Labels
-					Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
-					Matcher m = p.matcher(tInfo.announce);
-					
-					if (m.find()) {
-						
-						tracker.setText("<html><a href=\"www.google.com\">" + m.group().substring(1) + "</a></html>");
-						tracker.setCursor(new Cursor(Cursor.HAND_CURSOR));
-						
-					} else {
-						
-						tracker.setText(tInfo.announce);
-					}
-					
-					torrent_name.setText(tInfo.name);
-					info_hash.setText(tInfo.hexString(tInfo.infoHash));
-					peer_id.setText(tInfo.hexString(tInfo.peerId));
-					size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-					date.setText(DateFormat.getDateInstance().format(d));
-					
-					int arrSize = tInfo.announceList.size();
-
-					if (arrSize > 0) {
-						
-						for (String val : tInfo.announceList) {
-						
-							changeTracker.add(val);
-						}
-					}
-				}
-			}
-		});
+		//attach action listeners to UI widgets
+		//open button
+		openFileButton.addActionListener(new OpenAction());
+		connectButton.addActionListener(new ConnectAction());
+		panel1.addMouseListener(new PopupAction());
+		about.addActionListener(new AboutAction());
+		updateInterval.addActionListener(new UpdateAction());
 	}
 	
 	public static void main(String[] args) {
 		
-		frame = new JFrame("JRatioBoost");
-		frame.setContentPane(new JRatioBoost().panel1);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+			
+			public void run() {
+				
+				new JRatioBoost();
+			}
+		});
+	}
+	
+	class OpenAction implements ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		
+			FileDialog fd = new FileDialog(frame, "Choose a file", FileDialog.LOAD);
+			fd.setFile("*.torrent");
+			fd.setVisible(true);
+			changeTracker.setEnabled(false);
+		
+			if (fd.getFile() != null) {
+				
+				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
+				//update Labels
+				Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+				Matcher m = p.matcher(tInfo.announce);
+				
+				if (m.find()) {
+					
+					tracker.setText("<html><a href=\"www.google.com\">" + m.group().substring(1) + "</a></html>");
+					tracker.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					
+				} else {
+					
+					tracker.setText(tInfo.announce);
+				}
+				
+				torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
+				info_hash.setText(tInfo.hexString(tInfo.infoHash));
+				peer_id.setText(tInfo.hexString(tInfo.peerId));
+				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
+				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+				date.setText(DateFormat.getDateInstance().format(d));
+			
+				//if torrent has multiple trackers listed, add them to a popumenu list
+				int arrSize = tInfo.announceList.size();
+
+				if (arrSize > 0) {
+					
+					changeTracker.setEnabled(true);
+					
+					for (String val : tInfo.announceList) {
+					
+						changeTracker.add(val);
+					}
+				}
+			}
+			
+		}
+	}
+
+	class ConnectAction implements ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {
+		
+			//connect button was pressed
+			if (connectButton.getText().equals("Connect")) {
+				
+				tc = new TrackerConnect(tInfo);
+				connectButton.setText("Stop");
+				connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
+				upAmount = 0;	
+				
+				//send request at regular intervals
+				timer = new Timer();
+				timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+				
+			//stop button was pressed
+			} else {
+				
+				connectButton.setText("Connect");
+				connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/computer.gif")));
+				timer.cancel();
+			}
+		}
+	}
+	
+	class UpdateAction implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			UpdateAmount ua = new UpdateAmount(tc);
+			ua.pack();
+			ua.setLocationByPlatform(true);			
+			ua.setVisible(true);
+		}
+	}
+	
+	class AboutAction implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			About a = new About();
+			a.pack();
+			a.setLocationByPlatform(true);			
+			a.setVisible(true);
+		}
+	}
+	
+	class PopupAction extends MouseAdapter {
+		
+		@Override
+		public void mousePressed(MouseEvent me) {
+			
+			if (me.isPopupTrigger()) {
+					
+				menu.show(me.getComponent(), me.getX(), me.getY());
+			}
+		}
+	}
+	
+	class UpdateTask extends TimerTask {
+		
+		@Override
+		public void run() {
+			
+			int upSpeed = (Integer) spinner1.getValue();
+			upAmount += SizeConvert.KBToB(upSpeed);
+			
+			//update GUI label with tracker response info
+			seeders.setText(tc.seeders);
+			leechers.setText(tc.leechers);
+			update.setText(tc.interval);
+			downloaded.setText("100%");
+			uploaded.setText(new SizeConvert(upAmount).toString());
+			
+			int nextUpdate = Integer.parseInt(update.getText());
+			
+			if (nextUpdate <= 0) {
+				
+				//stop the timer thread from executing to prevent the timer task
+				//from continuing to execute while the http request is being made
+				//by the TrackerConnect instance
+				timer.cancel();
+				
+				//send get request to tracker with upload/download data
+				tc.connect(String.format("%d", upAmount), "0");
+				nextUpdate = Integer.parseInt(tc.interval);
+				
+				//the new http request has been made, start a new timer task
+				timer = new Timer();
+				timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+			}
+			
+			nextUpdate--;
+			
+			tc.interval = String.format("%d", nextUpdate);
+		}
 	}
 	
 	{

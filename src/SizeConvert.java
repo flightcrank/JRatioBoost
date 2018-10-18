@@ -12,17 +12,21 @@ class SizeConvert {
 
 	public SizeConvert(long bytes) {
 		
-		if (bytes > 1024 && bytes < Math.pow(1024, 2)) {
+		long oneKB = 1024;
+		long oneMB = (long) Math.pow(1024, 2);
+		long oneGB = (long) Math.pow(1024, 3);
+
+		if (bytes >= 1024 && bytes < oneMB) {
 			
 			value = kiloBytes(bytes);
 			size = SizeType.KB;
 		 
-		 } else if (bytes > 1024 && bytes < Math.pow(1024, 3)) {
+		 } else if (bytes >= oneMB && bytes < oneGB) {
 		 
 			value = megaBytes(bytes);
 			size = SizeType.MB;
-		 
-		 } else if (bytes > 1024 && bytes < Math.pow(1024, 4)) {
+
+		 } else if (bytes >= oneGB) {
 		 
 			value = gigaBytes(bytes);
 			size = SizeType.GB;
@@ -47,6 +51,11 @@ class SizeConvert {
 	public static float gigaBytes(long bytes) {
 	
 		return megaBytes(bytes) / 1024.0f;
+	}
+	
+	public static long KBToB(int kb) {
+
+		return kb * 1024;
 	}
 	
 	public String toString() {
