@@ -108,7 +108,7 @@ public class About extends JDialog {
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		panel2.add(label2, gbc);
 		final JLabel label3 = new JLabel();
-		label3.setText("<html><b>Website: </b><a href=\"https://gitlab.com/karma_chameleon/j-ratio-boost\">JRatio Boost</a></html>");
+		label3.setText("<html><b>Website: </b>gitlab.com/karma_chameleon/j-ratio-boost/</html>");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 2;
@@ -124,7 +124,7 @@ public class About extends JDialog {
 		final JLabel label5 = new JLabel();
 		label5.setHorizontalAlignment(0);
 		label5.setHorizontalTextPosition(2);
-		label5.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/Question.gif")));
+		label5.setIcon(UIManager.getIcon("OptionPane.informationIcon"));
 		label5.setText("");
 		label5.setVerticalAlignment(0);
 		label5.setVerticalTextPosition(0);

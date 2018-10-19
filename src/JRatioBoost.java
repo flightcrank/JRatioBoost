@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -7,7 +8,12 @@ import java.util.regex.*;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.text.DateFormat;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
+//Swing GUI program that lets you report to a private torrent tracker that you are uploading data from a torrent
+//when you really are not uploading anyhting at all
 public class JRatioBoost {
 	
 	private static JFrame frame;
@@ -37,14 +43,15 @@ public class JRatioBoost {
 	TorrentInfo tInfo;
 	TrackerConnect tc;
 	Timer timer;
-
-
+	
 	public JRatioBoost() {
-
+	
+		//set up the program window frame
 		frame = new JFrame("JRatioBoost");
 		frame.setContentPane(panel1);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		//set up menu
@@ -62,7 +69,7 @@ public class JRatioBoost {
 		//open button
 		openFileButton.addActionListener(new OpenAction());
 		connectButton.addActionListener(new ConnectAction());
-		panel1.addMouseListener(new PopupAction());
+		panel1.setComponentPopupMenu(menu);
 		about.addActionListener(new AboutAction());
 		updateInterval.addActionListener(new UpdateAction());
 	}
@@ -73,13 +80,21 @@ public class JRatioBoost {
 			
 			public void run() {
 				
+				try {
+					
+					UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					
+				} catch (Exception e) {
+				
+				}
+				
 				new JRatioBoost();
 			}
 		});
 	}
-	
+
 	class OpenAction implements ActionListener {
-	
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
 		
@@ -87,7 +102,7 @@ public class JRatioBoost {
 			fd.setFile("*.torrent");
 			fd.setVisible(true);
 			changeTracker.setEnabled(false);
-		
+			
 			if (fd.getFile() != null) {
 				
 				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
@@ -97,8 +112,7 @@ public class JRatioBoost {
 				
 				if (m.find()) {
 					
-					tracker.setText("<html><a href=\"www.google.com\">" + m.group().substring(1) + "</a></html>");
-					tracker.setCursor(new Cursor(Cursor.HAND_CURSOR));
+					tracker.setText(m.group().substring(1));
 					
 				} else {
 					
@@ -111,46 +125,74 @@ public class JRatioBoost {
 				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
 				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
 				date.setText(DateFormat.getDateInstance().format(d));
-			
+				
+				//remove all item from the tracker submenu so any subsequent calls to
+				//OpenAction doesn't continual add list of JMenuItems to the submenu
+				changeTracker.removeAll();
+				
 				//if torrent has multiple trackers listed, add them to a popumenu list
 				int arrSize = tInfo.announceList.size();
-
+				
 				if (arrSize > 0) {
 					
 					changeTracker.setEnabled(true);
 					
 					for (String val : tInfo.announceList) {
-					
-						changeTracker.add(val);
+						
+						JMenuItem item = changeTracker.add(val);
+						item.addActionListener(new ChangeTrackerAction());
 					}
 				}
+			}
+		}
+	}
+	
+	class ChangeTrackerAction implements ActionListener {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			JMenuItem item = (JMenuItem) e.getSource();
+			tInfo.announce = item.getText();
+			
+			Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+			Matcher m = p.matcher(tInfo.announce);
+			
+			if (m.find()) {
+				
+				tracker.setText("<html><a href=\"www.google.com\">" + m.group().substring(1) + "</a></html>");
+				tracker.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				
+			} else {
+				
+				tracker.setText(tInfo.announce);
 			}
 			
 		}
 	}
-
-	class ConnectAction implements ActionListener {
 	
+	class ConnectAction implements ActionListener {
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-		
+			
 			//connect button was pressed
 			if (connectButton.getText().equals("Connect")) {
+			
+				upAmount = 0;
+				connectButton.setText("Connecting..");
 				
-				tc = new TrackerConnect(tInfo);
-				connectButton.setText("Stop");
-				connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/close.gif")));
-				upAmount = 0;	
-				
-				//send request at regular intervals
-				timer = new Timer();
-				timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+				//connect to tracker in a diffrent thread so it wont
+				//stop the GUI from respoding while the TrackerConnect object
+				//precesses the request
+				ConnectTask ct = new ConnectTask();
+				ct.execute();
 				
 			//stop button was pressed
 			} else {
 				
 				connectButton.setText("Connect");
-				connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/computer.gif")));
+				//connectButton.setIcon(UIManager.getIcon("FileView.computerIcon"));
 				timer.cancel();
 			}
 		}
@@ -163,7 +205,7 @@ public class JRatioBoost {
 			
 			UpdateAmount ua = new UpdateAmount(tc);
 			ua.pack();
-			ua.setLocationByPlatform(true);			
+			ua.setLocationRelativeTo(null);
 			ua.setVisible(true);
 		}
 	}
@@ -175,23 +217,36 @@ public class JRatioBoost {
 			
 			About a = new About();
 			a.pack();
-			a.setLocationByPlatform(true);			
+			a.setLocationRelativeTo(null);
 			a.setVisible(true);
 		}
 	}
 	
-	class PopupAction extends MouseAdapter {
+	class ConnectTask extends SwingWorker<Void, Void> {
 		
+		//execute this method in its own background thread
 		@Override
-		public void mousePressed(MouseEvent me) {
+		public Void doInBackground() {
 			
-			if (me.isPopupTrigger()) {
-					
-				menu.show(me.getComponent(), me.getX(), me.getY());
-			}
+			panel1.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			tc = new TrackerConnect(tInfo);
+			return null;
+		}
+		
+		//execute this function on Swings event dispatch thread when
+		//background thread has finished executing its statements
+		@Override
+		protected void done() {
+			
+			panel1.setCursor(null);
+			connectButton.setText("Stop");
+
+			//send request at regular intervals
+			timer = new Timer();
+			timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
 		}
 	}
-	
+
 	class UpdateTask extends TimerTask {
 		
 		@Override
@@ -263,8 +318,9 @@ public class JRatioBoost {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panel1.add(panel2, gbc);
 		openFileButton = new JButton();
-		openFileButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/directory.gif")));
+		openFileButton.setIcon(UIManager.getIcon("FileView.directoryIcon"));
 		openFileButton.setText("Open File");
+		openFileButton.setToolTipText("Open torrent file");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -295,6 +351,7 @@ public class JRatioBoost {
 		panel3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Torrent Info"));
 		final JLabel label1 = new JLabel();
 		label1.setText("<html><b>Tracker:</b></html>");
+		label1.setToolTipText("The Tracker to report upload/download amounts too");
 		label1.putClientProperty("html.disable", Boolean.FALSE);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -304,6 +361,7 @@ public class JRatioBoost {
 		panel3.add(label1, gbc);
 		final JLabel label2 = new JLabel();
 		label2.setText("<html><b>Info Hash:</b></html>");
+		label2.setToolTipText("20byte URLencoded hash generated from the torrent files \"info\" value");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -312,6 +370,7 @@ public class JRatioBoost {
 		panel3.add(label2, gbc);
 		final JLabel label3 = new JLabel();
 		label3.setText("<html><b>Size:</b></html>");
+		label3.setToolTipText("The file size of the torrents file or files");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -321,6 +380,7 @@ public class JRatioBoost {
 		panel3.add(label3, gbc);
 		final JLabel label4 = new JLabel();
 		label4.setText("<html><b>Peer ID:</b></html>");
+		label4.setToolTipText("20byte URLencoded peer id, used to tell the tracker what torrent client is being used");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -364,6 +424,7 @@ public class JRatioBoost {
 		panel3.add(size, gbc);
 		final JLabel label5 = new JLabel();
 		label5.setText("<html><b>Date:</b></html>");
+		label5.setToolTipText("The date the torrent file was made");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 4;
@@ -392,6 +453,7 @@ public class JRatioBoost {
 		panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tracker Input/Ouput"));
 		final JLabel label6 = new JLabel();
 		label6.setText("<html><b>Seeders:</b></html>");
+		label6.setToolTipText("How many people are uploading the torrent");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -400,6 +462,7 @@ public class JRatioBoost {
 		panel4.add(label6, gbc);
 		final JLabel label7 = new JLabel();
 		label7.setText("<html><b>Leechers:</b></html>");
+		label7.setToolTipText("How many people are downloaded the torrent");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 1;
@@ -422,6 +485,7 @@ public class JRatioBoost {
 		panel4.add(leechers, gbc);
 		final JLabel label8 = new JLabel();
 		label8.setText("<html><b>Downloaded:</b></html>");
+		label8.setToolTipText("Amount that has been downloaded");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 2;
@@ -430,6 +494,7 @@ public class JRatioBoost {
 		panel4.add(label8, gbc);
 		final JLabel label9 = new JLabel();
 		label9.setText("<html><b>Uploaded:</b></html>");
+		label9.setToolTipText("Amount that has been uploaded");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -438,6 +503,7 @@ public class JRatioBoost {
 		panel4.add(label9, gbc);
 		final JLabel label10 = new JLabel();
 		label10.setText("<html><b>Update Interval:</b></html>");
+		label10.setToolTipText("Number of seconds that a report will be made to the tracker");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 4;
@@ -479,24 +545,27 @@ public class JRatioBoost {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panel1.add(panel5, gbc);
 		final JLabel label11 = new JLabel();
-		label11.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/sortUp.png")));
+		//label11.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/sortUp.png")));
 		label11.setText("<html><b>Upload Speed:</b></html>");
+		label11.setToolTipText("Upload speed in KB/s");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		gbc.anchor = GridBagConstraints.WEST;
 		panel5.add(label11, gbc);
 		final JLabel label12 = new JLabel();
-		label12.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/sortDown.png")));
+		//label12.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/sortDown.png")));
 		label12.setText("<html><b>Download Speed:</b></html>");
+		label12.setToolTipText("Download speed in Kb/s");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 1;
 		gbc.anchor = GridBagConstraints.WEST;
 		panel5.add(label12, gbc);
 		connectButton = new JButton();
-		connectButton.setIcon(new ImageIcon(getClass().getResource("/javax/swing/plaf/metal/icons/ocean/computer.gif")));
+		connectButton.setIcon(UIManager.getIcon("FileView.computerIcon"));
 		connectButton.setText("Connect");
+		connectButton.setToolTipText("Connect to the torrent Tracker");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 2;
 		gbc.gridy = 0;
@@ -527,4 +596,5 @@ public class JRatioBoost {
 	public JComponent $$$getRootComponent$$$() {
 		return panel1;
 	}
+	
 }
