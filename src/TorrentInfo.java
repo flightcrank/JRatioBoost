@@ -40,7 +40,7 @@ class TorrentInfo {
 	}
 
 	//calculate the client peer id
-	private void computePeerId(String client) {
+	public void computePeerId(String client) {
 		
 		byte[] b = client.getBytes();
 		
