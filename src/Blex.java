@@ -2,10 +2,12 @@
 //Lexical analyser for bencoded torrent files
 //JDK 7 or above
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.ArrayDeque;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 //a class to lexically scan a bencoded file and store the tokens and their values in an ArrayList 
 class Blex {
@@ -17,15 +19,6 @@ class Blex {
 		
 		tokenList = new ArrayList<TokenElement>();
 		valid = this.readFile(fileName);
-
-		if (!valid) {
-
-			System.out.println("Invalid torrent file: " + fileName);
-
-		} else {
-		
-			System.out.println(fileName + ": validated");	
-		}
 	}
 	
 	public String toString() {
@@ -116,7 +109,7 @@ class Blex {
 				//and store into a byte array
 				} else if (fileIndex == (int) ':') {
 					
-					int byteStrLen = Integer.parseInt(len.toString());
+					int byteStrLen =  Integer.parseInt(len.toString());
 					byte byteStr[] = new byte[byteStrLen];
 					TokenElement token = new TokenElement();
 					
@@ -130,12 +123,24 @@ class Blex {
 				
 			} while (fileIndex > -1);
 			
+		} catch (FileNotFoundException e) {
+
+			System.out.println("File not found error: " + e);
+			return false;
+
 		} catch (IOException e) {
 			
-			System.out.println("error: " + e);
+			System.out.println("IO error: " + e);
+			return false;
+		
+		} catch (Exception e) {
+			
+			System.out.println("Unknown error: " + e);
+			e.printStackTrace();
+			return false;
 		}
 		
-		//validates the file. making sure all required tokens have a matching END token
+		//validates the file, making sure all required tokens have a matching END token
 		return stack.isEmpty();
 	}
 }

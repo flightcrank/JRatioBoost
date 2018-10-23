@@ -1,7 +1,7 @@
-
-import java.net.*;
 import java.io.*;
-import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 
 //class to connect to a remore torrent tracker and issue HTML GET requests
@@ -19,7 +19,8 @@ class TrackerConnect {
 		connect();
 	}
 
-	//request to start a new torrent connection to tracker
+	//request to start a new torrent connection to tracker. using this method with no arguments will
+	//also send the events=started message to the tracker.
 	public void connect() {
 		
 		URL tracker;
@@ -31,6 +32,7 @@ class TrackerConnect {
 		try {
 			tracker = new URL(request);
 			conn = tracker.openConnection();
+			System.out.println("connection timeout " + conn.getReadTimeout());
 		
 		} catch (MalformedURLException e) {
 
@@ -52,7 +54,8 @@ class TrackerConnect {
 		}
 	}
 
-	//request to send upload and download data to tracker
+	//request to send upload and download data to tracker. Note this method omits the "event" key in the 
+	//query string as this overloaded method is for updating the ongoing connection
 	public void connect(String uploaded, String downloaded) {
 	
 		URL tracker;

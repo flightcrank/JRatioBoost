@@ -6,6 +6,7 @@ public class About extends JDialog {
 	
 	private JPanel contentPane;
 	private JButton buttonOK;
+	private JLabel label3;
 	
 	public About() {
 		
@@ -13,6 +14,8 @@ public class About extends JDialog {
 		setModal(true);
 		setTitle("About");
 		getRootPane().setDefaultButton(buttonOK);
+		
+		label3.setText("<html><b>Website: </b>gitlab.com/karma_chameleon/j-ratio-boost</html>");
 		
 		buttonOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -107,8 +110,8 @@ public class About extends JDialog {
 		gbc.gridy = 1;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		panel2.add(label2, gbc);
-		final JLabel label3 = new JLabel();
-		label3.setText("<html><b>Website: </b>gitlab.com/karma_chameleon/j-ratio-boost</html>");
+		label3 = new JLabel();
+		label3.setText("<html><b>Website: </b><a href=\"https://gitlab.com/karma_chameleon/j-ratio-boost\">JRatio Boost</a></html>");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 2;

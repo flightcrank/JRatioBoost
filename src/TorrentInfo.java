@@ -1,11 +1,10 @@
-
-import java.io.*;
-import java.net.URLEncoder;
-import java.util.ArrayList;
-import java.util.ArrayDeque;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 
 class TorrentInfo {
 
@@ -22,16 +21,24 @@ class TorrentInfo {
 	public static final int INFO_HASH = 0;
 	public static final int PEER_ID = 1;
 
-	public TorrentInfo(String fileName) {
+	public TorrentInfo(String fileName) throws Exception {
 		
 		Blex lexTree = new Blex(fileName);
-		announceList = new ArrayList<String>();
-		infoHash = new byte[20]; 
-		peerId = new byte[20]; 
-		
-		setInfo(lexTree.tokenList);
-		computeInfoHash(lexTree.tokenList, fileName);
-		computePeerId("KT5110");
+
+		if (lexTree.valid) {
+			
+			announceList = new ArrayList<String>();
+			infoHash = new byte[20]; 
+			peerId = new byte[20]; 
+			
+			setInfo(lexTree.tokenList);
+			computeInfoHash(lexTree.tokenList, fileName);
+			computePeerId("KT5110");
+
+		} else {
+			
+			throw new Exception("File did not pass bencoded validation test");
+		}
 	}
 	
 	public String toString() {

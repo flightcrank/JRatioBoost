@@ -12,23 +12,26 @@ public class UpdateClient extends JDialog {
 	private JButton buttonOK;
 	private JButton buttonCancel;
 	private JComboBox comboBox1;
-	private JFormattedTextField formattedTextField1 = new JFormattedTextField(versionFormat("#.#.#.#"));
+	private JFormattedTextField formattedTextField1;
 	private JSpinner spinner1;
 	HashMap<String, String> clients;
 	
 	public UpdateClient(TorrentInfo ti) {
-	
+		
 		clients = new HashMap<String, String>();
-		clients.put("KTorrent","KT");
-		clients.put("Transmission","TR");
-		clients.put("JavaTorrent","JT");
-		clients.put("qBittorrent","qB");
-		clients.put("µTorrent","UT");
-
+		clients.put("KTorrent", "KT");
+		clients.put("Transmission", "TR");
+		clients.put("JavaTorrent", "JT");
+		clients.put("qBittorrent", "qB");
+		clients.put("µTorrent", "UT");
+		
 		for (String val : clients.keySet()) {
 			
 			comboBox1.addItem(val);
 		}
+		
+		DefaultFormatterFactory factory = new DefaultFormatterFactory(versionFormat("#.#.#.#"));
+		formattedTextField1.setFormatterFactory(factory);
 		
 		setContentPane(contentPane);
 		setModal(true);
@@ -68,11 +71,11 @@ public class UpdateClient extends JDialog {
 		String version = (String) formattedTextField1.getValue();
 		
 		if (version != null) {
-		
+			
 			String name = (String) comboBox1.getSelectedItem();
-			ti.computePeerId(new String(clients.get(name) + version.replace(".","")));
+			ti.computePeerId(new String(clients.get(name) + version.replace(".", "")));
 		}
-
+		
 		dispose();
 	}
 	
@@ -162,6 +165,7 @@ public class UpdateClient extends JDialog {
 		gbc.anchor = GridBagConstraints.EAST;
 		gbc.insets = new Insets(5, 0, 0, 5);
 		panel2.add(label2, gbc);
+		formattedTextField1 = new JFormattedTextField();
 		formattedTextField1.setColumns(5);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;

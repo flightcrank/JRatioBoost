@@ -1,22 +1,18 @@
-
-import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
+import javax.swing.text.MaskFormatter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
-import java.util.regex.*;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.text.DateFormat;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import javax.swing.JSpinner.DefaultEditor;
-import java.text.ParseException;
-import javax.swing.text.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //Swing GUI program that lets you report to a private torrent tracker that you are uploading data from a torrent
-//when you really are not uploading anyhting at all
+//when you really are not uploading anything at all
 public class JRatioBoost {
 	
 	private static JFrame frame;
@@ -78,10 +74,10 @@ public class JRatioBoost {
 		menu.add(updateInterval);
 		menu.addSeparator();
 		menu.add(about);
-
-		spinner1.setModel(new SpinnerNumberModel(40,0,9999,1));
-		spinner2.setModel(new SpinnerNumberModel(0,0,9999,1));
-
+		
+		spinner1.setModel(new SpinnerNumberModel(40, 0, 9999, 1));
+		spinner2.setModel(new SpinnerNumberModel(0, 0, 9999, 1));
+		
 		//attach action listeners to UI widgets
 		//open button
 		openFileButton.addActionListener(new OpenAction());
@@ -108,8 +104,9 @@ public class JRatioBoost {
 		
 		return formatter;
 	}
-	public static void main(String[] args) {
 	
+	public static void main(String[] args) {
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			public void run() {
@@ -154,10 +151,10 @@ public class JRatioBoost {
 	private void $$$setupUI$$$() {
 		panel1 = new JPanel();
 		panel1.setLayout(new GridBagLayout());
-		panel1.setPreferredSize(new Dimension(450, 400));
 		panel1.setRequestFocusEnabled(false);
 		final JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridBagLayout());
+		panel2.setPreferredSize(new Dimension(450, 35));
 		GridBagConstraints gbc;
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -197,7 +194,7 @@ public class JRatioBoost {
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.ipadx = 5;
-		gbc.ipady = 5;
+		gbc.ipady = 10;
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panel1.add(panel3, gbc);
 		panel3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Torrent Info"));
@@ -228,7 +225,8 @@ public class JRatioBoost {
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.NORTHEAST;
+		gbc.anchor = GridBagConstraints.EAST;
+		gbc.fill = GridBagConstraints.VERTICAL;
 		gbc.insets = new Insets(0, 5, 0, 5);
 		panel3.add(label3, gbc);
 		final JLabel label4 = new JLabel();
@@ -298,7 +296,7 @@ public class JRatioBoost {
 		gbc.weighty = 1.0;
 		gbc.fill = GridBagConstraints.BOTH;
 		gbc.ipadx = 5;
-		gbc.ipady = 5;
+		gbc.ipady = 10;
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panel1.add(panel4, gbc);
 		panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tracker Input/Ouput"));
@@ -362,8 +360,7 @@ public class JRatioBoost {
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		gbc.anchor = GridBagConstraints.NORTH;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.anchor = GridBagConstraints.NORTHEAST;
 		gbc.insets = new Insets(0, 5, 0, 5);
 		panel4.add(label10, gbc);
 		uploaded = new JLabel();
@@ -392,6 +389,7 @@ public class JRatioBoost {
 		panel4.add(downloaded, gbc);
 		final JPanel panel5 = new JPanel();
 		panel5.setLayout(new GridBagLayout());
+		panel5.setRequestFocusEnabled(false);
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
 		gbc.gridy = 3;
@@ -400,7 +398,7 @@ public class JRatioBoost {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		panel1.add(panel5, gbc);
 		final JLabel label11 = new JLabel();
-		label11.setText("<html><b>Upload Speed:</b></html>");
+		label11.setText("Upload Speed:");
 		label11.setToolTipText("Upload speed in KB/s");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -408,7 +406,7 @@ public class JRatioBoost {
 		gbc.anchor = GridBagConstraints.EAST;
 		panel5.add(label11, gbc);
 		final JLabel label12 = new JLabel();
-		label12.setText("<html><b>Download Speed:</b></html>");
+		label12.setText("Download Speed:");
 		label12.setToolTipText("Download speed in Kb/s");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 0;
@@ -489,43 +487,52 @@ public class JRatioBoost {
 			
 			if (fd.getFile() != null) {
 				
-				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
-				//update Labels
-				Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
-				Matcher m = p.matcher(tInfo.announce);
-				
-				if (m.find()) {
+				try {
 					
-					tracker.setText(m.group().substring(1));
+					tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
 					
-				} else {
+					//update Labels
+					Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+					Matcher m = p.matcher(tInfo.announce);
 					
-					tracker.setText(tInfo.announce);
-				}
-				
-				torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
-				info_hash.setText(tInfo.hexString(tInfo.infoHash));
-				peer_id.setText(tInfo.hexString(tInfo.peerId));
-				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-				date.setText(DateFormat.getDateInstance().format(d));
-				
-				//remove all item from the tracker submenu so any subsequent calls to
-				//OpenAction doesn't continual add list of JMenuItems to the submenu
-				changeTracker.removeAll();
-				
-				//if torrent has multiple trackers listed, add them to a popumenu list
-				int arrSize = tInfo.announceList.size();
-				
-				if (arrSize > 0) {
-					
-					changeTracker.setEnabled(true);
-					
-					for (String val : tInfo.announceList) {
+					if (m.find()) {
 						
-						JMenuItem item = changeTracker.add(val);
-						item.addActionListener(new ChangeTrackerAction());
+						tracker.setText(m.group().substring(1));
+						
+					} else {
+						
+						tracker.setText(tInfo.announce);
 					}
+					
+					torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
+					info_hash.setText(tInfo.hexString(tInfo.infoHash));
+					peer_id.setText(tInfo.hexString(tInfo.peerId));
+					size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
+					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+					date.setText(DateFormat.getDateInstance().format(d));
+					
+					//remove all item from the tracker submenu so any subsequent calls to
+					//OpenAction doesn't continual add list of JMenuItems to the submenu
+					changeTracker.removeAll();
+					
+					//if torrent has multiple trackers listed, add them to a popumenu list
+					int arrSize = tInfo.announceList.size();
+					
+					if (arrSize > 0) {
+						
+						changeTracker.setEnabled(true);
+						
+						for (String val : tInfo.announceList) {
+							
+							JMenuItem item = changeTracker.add(val);
+							item.addActionListener(new ChangeTrackerAction());
+						}
+					}
+					
+				} catch (Exception ex) {
+					
+					JOptionPane.showMessageDialog(frame, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
 				}
 			}
 		}
@@ -561,11 +568,12 @@ public class JRatioBoost {
 			//connect button was pressed
 			if (connectButton.getText().equals("Connect")) {
 				
+				openFileButton.setEnabled(false);
 				upAmount = 0;
 				connectButton.setText("Connecting..");
 				
-				//connect to tracker in a diffrent thread so it wont
-				//stop the GUI from respoding while the TrackerConnect object
+				//connect to tracker in a different thread so it wont
+				//stop the GUI from responding while the TrackerConnect object
 				//precesses the request
 				ConnectTask ct = new ConnectTask();
 				ct.execute();
@@ -573,6 +581,7 @@ public class JRatioBoost {
 				//stop button was pressed
 			} else {
 				
+				openFileButton.setEnabled(true);
 				connectButton.setText("Connect");
 				//connectButton.setIcon(UIManager.getIcon("FileView.computerIcon"));
 				timer.cancel();
@@ -667,6 +676,4 @@ public class JRatioBoost {
 			tc.interval = String.format("%d", nextUpdate);
 		}
 	}
-	
-	
 }
