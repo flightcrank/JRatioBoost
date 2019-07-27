@@ -1,615 +1,584 @@
-import javax.swing.*;
-import javax.swing.text.MaskFormatter;
-import java.awt.*;
+
+import java.awt.Cursor;
+import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+import javax.swing.SwingWorker;
+import javax.swing.UIManager;
 
-//Swing GUI program that lets you report to a private torrent tracker that you are uploading data from a torrent
-//when you really are not uploading anything at all
-public class JRatioBoost {
-	
-	private static JFrame frame;
-	private JPanel panel1;
-	private JButton openFileButton;
-	private JSpinner spinner1;
-	private JSpinner spinner2;
-	private JButton connectButton;
-	private JLabel torrent_name;
-	private JLabel tracker;
-	private JLabel info_hash;
-	private JLabel peer_id;
-	private JLabel size;
-	private JLabel seeders;
-	private JLabel leechers;
-	private JLabel update;
-	private JLabel uploaded;
-	private JLabel downloaded;
-	private JLabel date;
-	private JPopupMenu menu;
-	private JMenuItem[] trackerList;
-	private JMenuItem about;
-	private JMenuItem updateInterval;
-	private JMenu changeTracker;
-	private JMenu changeClient;
-	
+public class JRatioBoost extends javax.swing.JFrame {
+
 	long upAmount = 0;
 	TorrentInfo tInfo;
 	TrackerConnect tc;
 	Timer timer;
-	
+
 	public JRatioBoost() {
-		
-		//set up the program window frame
-		frame = new JFrame("JRatioBoost");
-		frame.setContentPane(panel1);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
-		
-		JMenuItem kt = new JMenuItem("KTorrent 5.11");
-		JMenuItem tr = new JMenuItem("Transmission 2.94");
-		JMenuItem custom = new JMenuItem("Custom");
-		
-		//set up menu
-		menu = new JPopupMenu();
-		about = new JMenuItem("About");
-		updateInterval = new JMenuItem("Update Interval");
-		changeTracker = new JMenu("Tracker");
-		changeClient = new JMenu("Client");
-		changeTracker.setEnabled(false);
-		changeClient.add(kt);
-		changeClient.add(tr);
-		changeClient.add(custom);
-		changeClient.setEnabled(false);
-		menu.add(changeTracker);
-		menu.add(changeClient);
-		menu.add(updateInterval);
-		menu.addSeparator();
-		menu.add(about);
-		
-		spinner1.setModel(new SpinnerNumberModel(40, 0, 9999, 1));
-		spinner2.setModel(new SpinnerNumberModel(0, 0, 9999, 1));
-		
-		//attach action listeners to UI widgets
-		//open button
-		openFileButton.addActionListener(new OpenAction());
-		connectButton.addActionListener(new ConnectAction());
-		panel1.setComponentPopupMenu(menu);
-		about.addActionListener(new AboutAction());
-		updateInterval.addActionListener(new UpdateAction());
-		kt.addActionListener(new ClientAction());
-		tr.addActionListener(new ClientAction());
-		custom.addActionListener(new ClientAction());
+
+		initComponents();
 	}
-	
-	protected MaskFormatter versionFormat(String s) {
-		
-		MaskFormatter formatter = null;
-		
-		try {
-			formatter = new MaskFormatter(s);
-			
-		} catch (ParseException exc) {
-			
-			System.err.println("formatter is bad: " + exc.getMessage());
+
+        // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+        private void initComponents() {
+                java.awt.GridBagConstraints gridBagConstraints;
+
+                jSeparator1 = new javax.swing.JSeparator();
+                jPopupMenu1 = new javax.swing.JPopupMenu();
+                changeTracker = new javax.swing.JMenu();
+                changeClient = new javax.swing.JMenu();
+                jPopupMenu1.add(changeTracker);
+                jPopupMenu1.add(changeClient);
+                jMenuItem3 = new javax.swing.JMenuItem();
+                jPopupMenu1.add(jMenuItem3);
+                jPopupMenu1.add(jSeparator1);
+                jMenuItem4 = new javax.swing.JMenuItem();
+                jPopupMenu1.add(jMenuItem4);
+                jMenuItem5 = new javax.swing.JMenuItem();
+                jMenuItem6 = new javax.swing.JMenuItem();
+                jMenuItem7 = new javax.swing.JMenuItem();
+                changeClient.add(jMenuItem5);
+                changeClient.add(jMenuItem6);
+                changeClient.add(jMenuItem7);
+                jPanel6 = new javax.swing.JPanel();
+                jPanel6.setComponentPopupMenu(jPopupMenu1);
+                jPanel3 = new javax.swing.JPanel();
+                jPanel1 = new javax.swing.JPanel();
+                jLabel1 = new javax.swing.JLabel();
+                jLabel3 = new javax.swing.JLabel();
+                jLabel4 = new javax.swing.JLabel();
+                jLabel8 = new javax.swing.JLabel();
+                jLabel9 = new javax.swing.JLabel();
+                tracker = new javax.swing.JLabel();
+                info_hash = new javax.swing.JLabel();
+                peer_id = new javax.swing.JLabel();
+                size = new javax.swing.JLabel();
+                date = new javax.swing.JLabel();
+                jPanel2 = new javax.swing.JPanel();
+                jLabel2 = new javax.swing.JLabel();
+                jLabel15 = new javax.swing.JLabel();
+                jLabel16 = new javax.swing.JLabel();
+                jLabel17 = new javax.swing.JLabel();
+                jLabel18 = new javax.swing.JLabel();
+                seeders = new javax.swing.JLabel();
+                leechers = new javax.swing.JLabel();
+                downloaded = new javax.swing.JLabel();
+                uploaded = new javax.swing.JLabel();
+                update = new javax.swing.JLabel();
+                jPanel4 = new javax.swing.JPanel();
+                openFileButton = new javax.swing.JButton();
+                torrent_name = new javax.swing.JLabel();
+                jSpinLoader1 = new JSpinLoader();
+                jSpinLoader1.setSize(6);
+                jPanel5 = new javax.swing.JPanel();
+                jLabel6 = new javax.swing.JLabel();
+                jSpinner1 = new javax.swing.JSpinner();
+                connectButton = new javax.swing.JButton();
+                jLabel7 = new javax.swing.JLabel();
+                jSpinner4 = new javax.swing.JSpinner();
+                jArrow1 = new JArrow();
+                jArrow2 = new JArrow();
+                jArrow2.setDirection(JArrow.DOWN);
+
+                changeTracker.setText("Tracker");
+                changeTracker.setEnabled(false);
+
+                changeClient.setText("Client");
+                changeClient.setEnabled(false);
+
+                jMenuItem3.setText("Update Interval");
+                jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem3ActionPerformed(evt);
+                        }
+                });
+
+                jMenuItem4.setText("About");
+                jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem4ActionPerformed(evt);
+                        }
+                });
+
+                jMenuItem5.setText("KTorrent 5.11");
+                jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem5ActionPerformed(evt);
+                        }
+                });
+
+                jMenuItem6.setText("Transmission 2.94");
+                jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem6ActionPerformed(evt);
+                        }
+                });
+
+                jMenuItem7.setText("Custom Client");
+                jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem7ActionPerformed(evt);
+                        }
+                });
+
+                setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+                setTitle("JRatioBoost");
+
+                jPanel6.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+                jPanel6.setLayout(new java.awt.BorderLayout());
+
+                jPanel3.setLayout(new java.awt.GridLayout(2, 0));
+
+                jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent Info", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+                jPanel1.setLayout(new java.awt.GridBagLayout());
+
+                jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel1.setText("Tracker:");
+                jLabel1.setAlignmentX(0.5F);
+                jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+                jPanel1.add(jLabel1, gridBagConstraints);
+
+                jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel3.setText("Info_Hash:");
+                jLabel3.setAlignmentX(0.5F);
+                jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel1.add(jLabel3, gridBagConstraints);
+
+                jLabel4.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel4.setText("Peer_ID:");
+                jLabel4.setAlignmentX(0.5F);
+                jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 2;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel1.add(jLabel4, gridBagConstraints);
+
+                jLabel8.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel8.setText("Size:");
+                jLabel8.setAlignmentX(0.5F);
+                jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 3;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel1.add(jLabel8, gridBagConstraints);
+
+                jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel9.setText("Date:");
+                jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                jLabel9.setAlignmentY(0.0F);
+                jLabel9.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 4;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+                jPanel1.add(jLabel9, gridBagConstraints);
+
+                tracker.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+                jPanel1.add(tracker, gridBagConstraints);
+
+                info_hash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel1.add(info_hash, gridBagConstraints);
+
+                peer_id.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 2;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel1.add(peer_id, gridBagConstraints);
+
+                size.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 3;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel1.add(size, gridBagConstraints);
+
+                date.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+                date.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 4;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+                jPanel1.add(date, gridBagConstraints);
+
+                jPanel3.add(jPanel1);
+
+                jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Tracker Output", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+                jPanel2.setLayout(new java.awt.GridBagLayout());
+
+                jLabel2.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel2.setText("Seeders:");
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+                jPanel2.add(jLabel2, gridBagConstraints);
+
+                jLabel15.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel15.setText("Leechers:");
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                jPanel2.add(jLabel15, gridBagConstraints);
+
+                jLabel16.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel16.setText("Downloaded:");
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                jPanel2.add(jLabel16, gridBagConstraints);
+
+                jLabel17.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel17.setText("Uploaded:");
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                jPanel2.add(jLabel17, gridBagConstraints);
+
+                jLabel18.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel18.setText("Update Interval:");
+                jLabel18.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
+                jPanel2.add(jLabel18, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+                jPanel2.add(seeders, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel2.add(leechers, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel2.add(downloaded, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel2.add(uploaded, gridBagConstraints);
+
+                update.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+                jPanel2.add(update, gridBagConstraints);
+
+                jPanel3.add(jPanel2);
+
+                jPanel6.add(jPanel3, java.awt.BorderLayout.CENTER);
+
+                jPanel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 5, 0));
+                jPanel4.setLayout(new java.awt.GridBagLayout());
+
+                openFileButton.setText("Open Torrent");
+                openFileButton.setMargin(new java.awt.Insets(5, 0, 5, 0));
+                openFileButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                openFileButtonActionPerformed(evt);
+                        }
+                });
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 0, 0, 5);
+                jPanel4.add(openFileButton, gridBagConstraints);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                jPanel4.add(torrent_name, gridBagConstraints);
+
+                jSpinLoader1.setMinimumSize(new java.awt.Dimension(30, 30));
+                jPanel4.add(jSpinLoader1, new java.awt.GridBagConstraints());
+
+                jPanel6.add(jPanel4, java.awt.BorderLayout.PAGE_START);
+
+                jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
+                jPanel5.setLayout(new java.awt.GridBagLayout());
+
+                jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel6.setText("Upload (kb/s)");
+                jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                jPanel5.add(jLabel6, gridBagConstraints);
+
+                jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 9999, 1));
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 2;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 0.5;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel5.add(jSpinner1, gridBagConstraints);
+
+                connectButton.setText("Connect");
+                connectButton.setMargin(new java.awt.Insets(0, 10, 0, 10));
+                connectButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                connectButtonActionPerformed(evt);
+                        }
+                });
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 3;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.gridheight = 2;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.weightx = 0.5;
+                jPanel5.add(connectButton, gridBagConstraints);
+
+                jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel7.setText("Download (kb/s)");
+                jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                jPanel5.add(jLabel7, gridBagConstraints);
+
+                jSpinner4.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9999, 1));
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 2;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 0.5;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                jPanel5.add(jSpinner4, gridBagConstraints);
+
+                jArrow1.setMinimumSize(new java.awt.Dimension(20, 20));
+                jArrow1.setPreferredSize(new java.awt.Dimension(20, 20));
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel5.add(jArrow1, gridBagConstraints);
+
+                jArrow2.setMinimumSize(new java.awt.Dimension(20, 20));
+                jArrow2.setPreferredSize(new java.awt.Dimension(20, 20));
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 1;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel5.add(jArrow2, gridBagConstraints);
+
+                jPanel6.add(jPanel5, java.awt.BorderLayout.SOUTH);
+
+                getContentPane().add(jPanel6, java.awt.BorderLayout.CENTER);
+
+                pack();
+        }// </editor-fold>//GEN-END:initComponents
+
+    private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileButtonActionPerformed
+
+	FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
+	    fd.setVisible(true);
+	    changeTracker.setEnabled(false);
+	    changeClient.setEnabled(true);
+
+	    if (fd.getFile() != null) {
+
+		    try {
+
+			    tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
+
+			    //update Labels
+			    Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+			    Matcher m = p.matcher(tInfo.announce);
+
+			    if (m.find()) {
+
+				    tracker.setText(m.group().substring(1));
+
+			    } else {
+
+				    tracker.setText(tInfo.announce);
+			    }
+
+			    torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
+			    info_hash.setText(tInfo.hexString(tInfo.infoHash));
+			    peer_id.setText(tInfo.hexString(tInfo.peerId));
+			    size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
+			    Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+			    date.setText(DateFormat.getDateInstance().format(d));
+
+			    //remove all item from the tracker submenu so any subsequent calls to
+			    //OpenAction doesn't continual add list of JMenuItems to the submenu
+			    changeTracker.removeAll();
+
+			    //if torrent has multiple trackers listed, add them to a popumenu list
+			    int arrSize = tInfo.announceList.size();
+
+			    if (arrSize > 0) {
+
+				    changeTracker.setEnabled(true);
+
+				    for (String val : tInfo.announceList) {
+
+					    JMenuItem item = changeTracker.add(val);
+					    item.addActionListener(new ChangeTrackerAction());
+				    }
+			    }
+
+		    } catch (Exception ex) {
+
+			    JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+			    ex.printStackTrace();
+		    }
+	    }
+    }//GEN-LAST:event_openFileButtonActionPerformed
+
+    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
+	    
+		if (connectButton.getText().equals("Connect")) {
+
+			openFileButton.setEnabled(false);
+			upAmount = 0;
+			connectButton.setText("Connecting..");
+			jSpinLoader1.start();
+
+			//connect to tracker in a different thread so it wont
+			//stop the GUI from responding while the TrackerConnect object
+			//precesses the request
+			ConnectTask ct = new ConnectTask();
+			ct.execute();
+
+		//stop button was pressed
+		} else {
+
+			openFileButton.setEnabled(true);
+			connectButton.setText("Connect");
+			timer.cancel();
+			jSpinLoader1.stop();
 		}
+    }//GEN-LAST:event_connectButtonActionPerformed
+
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+
+	    About a = new About();
+	    a.pack();
+	    a.setLocationRelativeTo(null);
+	    a.setVisible(true);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
+
+        private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
 		
-		return formatter;
-	}
-	
-	public static void main(String[] args) {
+		UpdateAmount ua = new UpdateAmount(tc);
+		ua.pack();
+		ua.setLocationRelativeTo(null);
+		ua.setVisible(true);          
+        }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+        private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+                
+		tInfo.computePeerId("KT5110");
+		peer_id.setText(tInfo.hexString(tInfo.peerId));
+        }//GEN-LAST:event_jMenuItem5ActionPerformed
+
+        private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
 		
-		SwingUtilities.invokeLater(new Runnable() {
-			
-			public void run() {
-				
-				//Use native look and feel
-				try {
-					//for linux systems like KDE try to use GTK's looks and feel
-					if (System.getProperty("os.name").equals("Linux")) {
-						
-						UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-						
-					} else {
-						
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					}
-					
-				} catch (Exception e) {
-					
-					System.out.println(e);
-				}
-				
-				//create and show the Swing GUI
-				new JRatioBoost();
-			}
-		});
-	}
-	
-	{
-// GUI initializer generated by IntelliJ IDEA GUI Designer
-// >>> IMPORTANT!! <<<
-// DO NOT EDIT OR ADD ANY CODE HERE!
-		$$$setupUI$$$();
-	}
-	
-	/**
-	 * Method generated by IntelliJ IDEA GUI Designer
-	 * >>> IMPORTANT!! <<<
-	 * DO NOT edit this method OR call it in your code!
-	 *
-	 * @noinspection ALL
-	 */
-	private void $$$setupUI$$$() {
-		panel1 = new JPanel();
-		panel1.setLayout(new GridBagLayout());
-		panel1.setRequestFocusEnabled(false);
-		final JPanel panel2 = new JPanel();
-		panel2.setLayout(new GridBagLayout());
-		panel2.setPreferredSize(new Dimension(450, 35));
-		GridBagConstraints gbc;
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
-		gbc.anchor = GridBagConstraints.NORTH;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
-		panel1.add(panel2, gbc);
-		openFileButton = new JButton();
-		openFileButton.setText("Open File");
-		openFileButton.setToolTipText("Open torrent file");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.weighty = 1.0;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		gbc.ipadx = 5;
-		gbc.ipady = 5;
-		panel2.add(openFileButton, gbc);
-		torrent_name = new JLabel();
-		torrent_name.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel2.add(torrent_name, gbc);
-		final JPanel panel3 = new JPanel();
-		panel3.setLayout(new GridBagLayout());
-		panel3.setPreferredSize(new Dimension(2, 116));
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.weighty = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.ipadx = 5;
-		gbc.ipady = 10;
-		gbc.insets = new Insets(5, 5, 5, 5);
-		panel1.add(panel3, gbc);
-		panel3.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Torrent Info"));
-		final JLabel label1 = new JLabel();
-		label1.setText("<html><b>Tracker:</b></html>");
-		label1.setToolTipText("The Tracker to report upload/download amounts too");
-		label1.putClientProperty("html.disable", Boolean.FALSE);
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel3.add(label1, gbc);
-		final JLabel label2 = new JLabel();
-		label2.setText("<html><b>Info Hash:</b></html>");
-		label2.setToolTipText("20byte URLencoded hash generated from the torrent files \"info\" value");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel3.add(label2, gbc);
-		final JLabel label3 = new JLabel();
-		label3.setText("<html><b>Size:</b></html>");
-		label3.setToolTipText("The file size of the torrents file or files");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel3.add(label3, gbc);
-		final JLabel label4 = new JLabel();
-		label4.setText("<html><b>Peer ID:</b></html>");
-		label4.setToolTipText("20byte URLencoded peer id, used to tell the tracker what torrent client is being used");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel3.add(label4, gbc);
-		tracker = new JLabel();
-		tracker.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		panel3.add(tracker, gbc);
-		info_hash = new JLabel();
-		info_hash.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		panel3.add(info_hash, gbc);
-		peer_id = new JLabel();
-		peer_id.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.WEST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		panel3.add(peer_id, gbc);
-		size = new JLabel();
-		size.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		panel3.add(size, gbc);
-		final JLabel label5 = new JLabel();
-		label5.setText("<html><b>Date:</b></html>");
-		label5.setToolTipText("The date the torrent file was made");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		gbc.anchor = GridBagConstraints.NORTHEAST;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel3.add(label5, gbc);
-		date = new JLabel();
-		date.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 4;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.anchor = GridBagConstraints.NORTHWEST;
-		panel3.add(date, gbc);
-		final JPanel panel4 = new JPanel();
-		panel4.setLayout(new GridBagLayout());
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.weighty = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		gbc.ipadx = 5;
-		gbc.ipady = 10;
-		gbc.insets = new Insets(5, 5, 5, 5);
-		panel1.add(panel4, gbc);
-		panel4.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tracker Input/Ouput"));
-		final JLabel label6 = new JLabel();
-		label6.setText("<html><b>Seeders:</b></html>");
-		label6.setToolTipText("How many people are uploading the torrent");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel4.add(label6, gbc);
-		final JLabel label7 = new JLabel();
-		label7.setText("<html><b>Leechers:</b></html>");
-		label7.setToolTipText("How many people are downloaded the torrent");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel4.add(label7, gbc);
-		seeders = new JLabel();
-		seeders.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.WEST;
-		panel4.add(seeders, gbc);
-		leechers = new JLabel();
-		leechers.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.WEST;
-		panel4.add(leechers, gbc);
-		final JLabel label8 = new JLabel();
-		label8.setText("<html><b>Downloaded:</b></html>");
-		label8.setToolTipText("Amount that has been downloaded");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel4.add(label8, gbc);
-		final JLabel label9 = new JLabel();
-		label9.setText("<html><b>Uploaded:</b></html>");
-		label9.setToolTipText("Amount that has been uploaded");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.EAST;
-		gbc.fill = GridBagConstraints.VERTICAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel4.add(label9, gbc);
-		final JLabel label10 = new JLabel();
-		label10.setText("<html><b>Update Interval:</b></html>");
-		label10.setToolTipText("Number of seconds that a report will be made to the tracker");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		gbc.anchor = GridBagConstraints.NORTHEAST;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel4.add(label10, gbc);
-		uploaded = new JLabel();
-		uploaded.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.WEST;
-		panel4.add(uploaded, gbc);
-		update = new JLabel();
-		update.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 4;
-		gbc.weightx = 1.0;
-		gbc.weighty = 1.0;
-		gbc.anchor = GridBagConstraints.NORTH;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		panel4.add(update, gbc);
-		downloaded = new JLabel();
-		downloaded.setText("");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 2;
-		gbc.anchor = GridBagConstraints.WEST;
-		panel4.add(downloaded, gbc);
-		final JPanel panel5 = new JPanel();
-		panel5.setLayout(new GridBagLayout());
-		panel5.setRequestFocusEnabled(false);
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.SOUTH;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(5, 5, 5, 5);
-		panel1.add(panel5, gbc);
-		final JLabel label11 = new JLabel();
-		label11.setText("Upload Speed:");
-		label11.setToolTipText("Upload speed in KB/s");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.anchor = GridBagConstraints.EAST;
-		panel5.add(label11, gbc);
-		final JLabel label12 = new JLabel();
-		label12.setText("Download Speed:");
-		label12.setToolTipText("Download speed in Kb/s");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 0;
-		gbc.gridy = 1;
-		gbc.anchor = GridBagConstraints.EAST;
-		panel5.add(label12, gbc);
-		connectButton = new JButton();
-		connectButton.setText("Connect");
-		connectButton.setToolTipText("Connect to the torrent Tracker");
-		gbc = new GridBagConstraints();
-		gbc.gridx = 2;
-		gbc.gridy = 0;
-		gbc.gridheight = 2;
-		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.BOTH;
-		panel5.add(connectButton, gbc);
-		spinner1 = new JSpinner();
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 0;
-		gbc.weightx = 1.0;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0, 5, 5, 5);
-		panel5.add(spinner1, gbc);
-		spinner2 = new JSpinner();
-		gbc = new GridBagConstraints();
-		gbc.gridx = 1;
-		gbc.gridy = 1;
-		gbc.fill = GridBagConstraints.HORIZONTAL;
-		gbc.insets = new Insets(0, 5, 0, 5);
-		panel5.add(spinner2, gbc);
-	}
-	
-	/**
-	 * @noinspection ALL
-	 */
-	public JComponent $$$getRootComponent$$$() {
-		return panel1;
-	}
-	
-	class ClientAction implements ActionListener {
+		tInfo.computePeerId("TR2940");
+		peer_id.setText(tInfo.hexString(tInfo.peerId));
+        }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+        private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
 		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			JMenuItem item = (JMenuItem) e.getSource();
-			
-			if (item.getText().equals("KTorrent 5.11")) {
-				
-				tInfo.computePeerId("KT5110");
-				
-			} else if (item.getText().equals("Transmission 2.94")) {
-				
-				tInfo.computePeerId("TR2940");
-				
-			} else {
-				
-				UpdateClient c = new UpdateClient(tInfo);
-				c.pack();
-				c.setLocationRelativeTo(null);
-				c.setVisible(true);
-			}
-			
-			//Change the label in the GUI to reflect the change of client
-			peer_id.setText(tInfo.hexString(tInfo.peerId));
-		}
-	}
-	
-	class OpenAction implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			FileDialog fd = new FileDialog(frame, "Choose a file", FileDialog.LOAD);
-			fd.setVisible(true);
-			changeTracker.setEnabled(false);
-			changeClient.setEnabled(true);
-			
-			if (fd.getFile() != null) {
-				
-				try {
-					
-					tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
-					
-					//update Labels
-					Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
-					Matcher m = p.matcher(tInfo.announce);
-					
-					if (m.find()) {
-						
-						tracker.setText(m.group().substring(1));
-						
-					} else {
-						
-						tracker.setText(tInfo.announce);
-					}
-					
-					torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
-					info_hash.setText(tInfo.hexString(tInfo.infoHash));
-					peer_id.setText(tInfo.hexString(tInfo.peerId));
-					size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-					date.setText(DateFormat.getDateInstance().format(d));
-					
-					//remove all item from the tracker submenu so any subsequent calls to
-					//OpenAction doesn't continual add list of JMenuItems to the submenu
-					changeTracker.removeAll();
-					
-					//if torrent has multiple trackers listed, add them to a popumenu list
-					int arrSize = tInfo.announceList.size();
-					
-					if (arrSize > 0) {
-						
-						changeTracker.setEnabled(true);
-						
-						for (String val : tInfo.announceList) {
-							
-							JMenuItem item = changeTracker.add(val);
-							item.addActionListener(new ChangeTrackerAction());
-						}
-					}
-					
-				} catch (Exception ex) {
-					
-					JOptionPane.showMessageDialog(frame, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-					ex.printStackTrace();
-				}
-			}
-		}
-	}
-	
+		UpdateClient c = new UpdateClient(tInfo);
+		c.pack();
+		c.setLocationRelativeTo(null);
+		c.setVisible(true);          
+		peer_id.setText(tInfo.hexString(tInfo.peerId));
+        }//GEN-LAST:event_jMenuItem7ActionPerformed
+
 	class ChangeTrackerAction implements ActionListener {
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
+
 			JMenuItem item = (JMenuItem) e.getSource();
 			tInfo.announce = item.getText();
-			
+
 			Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
 			Matcher m = p.matcher(tInfo.announce);
-			
+
 			if (m.find()) {
-				
+
 				tracker.setText(m.group().substring(1));
-				
+
 			} else {
-				
+
 				tracker.setText(tInfo.announce);
 			}
-		}
-	}
-	
-	class ConnectAction implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			//connect button was pressed
-			if (connectButton.getText().equals("Connect")) {
-				
-				openFileButton.setEnabled(false);
-				upAmount = 0;
-				connectButton.setText("Connecting..");
-				
-				//connect to tracker in a different thread so it wont
-				//stop the GUI from responding while the TrackerConnect object
-				//precesses the request
-				ConnectTask ct = new ConnectTask();
-				ct.execute();
-				
-				//stop button was pressed
-			} else {
-				
-				openFileButton.setEnabled(true);
-				connectButton.setText("Connect");
-				//connectButton.setIcon(UIManager.getIcon("FileView.computerIcon"));
-				timer.cancel();
-			}
-		}
-	}
-	
-	class UpdateAction implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			UpdateAmount ua = new UpdateAmount(tc);
-			ua.pack();
-			ua.setLocationRelativeTo(null);
-			ua.setVisible(true);
-		}
-	}
-	
-	class AboutAction implements ActionListener {
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			About a = new About();
-			a.pack();
-			a.setLocationRelativeTo(null);
-			a.setVisible(true);
 		}
 	}
 	
@@ -619,7 +588,7 @@ public class JRatioBoost {
 		@Override
 		public Void doInBackground() {
 			
-			panel1.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			jPanel6.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			tc = new TrackerConnect(tInfo);
 			return null;
 		}
@@ -629,7 +598,7 @@ public class JRatioBoost {
 		@Override
 		protected void done() {
 			
-			panel1.setCursor(null);
+			jPanel6.setCursor(null);
 			connectButton.setText("Stop");
 			
 			//send request at regular intervals
@@ -643,7 +612,7 @@ public class JRatioBoost {
 		@Override
 		public void run() {
 			
-			int upSpeed = (Integer) spinner1.getValue();
+			int upSpeed = (Integer) jSpinner1.getValue();
 			upAmount += SizeConvert.KBToB(upSpeed);
 			
 			//update GUI label with tracker response info
@@ -676,4 +645,83 @@ public class JRatioBoost {
 			tc.interval = String.format("%d", nextUpdate);
 		}
 	}
+
+	public static void main(String args[]) {
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+
+				//Use native look and feel
+				try {
+					//for linux systems just use nimbus look and feel
+					if (System.getProperty("os.name").equals("Linux")) {
+
+						//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+						UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+
+					} else {
+
+						//native l&f
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					}
+
+				} catch (Exception e) {
+
+					System.out.println(e);
+				}
+
+				//create and show the Swing GUI
+				new JRatioBoost().setVisible(true);
+			}
+		});
+	}
+
+        // Variables declaration - do not modify//GEN-BEGIN:variables
+        private javax.swing.JMenu changeClient;
+        private javax.swing.JMenu changeTracker;
+        private javax.swing.JButton connectButton;
+        private javax.swing.JLabel date;
+        private javax.swing.JLabel downloaded;
+        private javax.swing.JLabel info_hash;
+        private JArrow jArrow1;
+        private JArrow jArrow2;
+        private javax.swing.JLabel jLabel1;
+        private javax.swing.JLabel jLabel15;
+        private javax.swing.JLabel jLabel16;
+        private javax.swing.JLabel jLabel17;
+        private javax.swing.JLabel jLabel18;
+        private javax.swing.JLabel jLabel2;
+        private javax.swing.JLabel jLabel3;
+        private javax.swing.JLabel jLabel4;
+        private javax.swing.JLabel jLabel6;
+        private javax.swing.JLabel jLabel7;
+        private javax.swing.JLabel jLabel8;
+        private javax.swing.JLabel jLabel9;
+        private javax.swing.JMenuItem jMenuItem3;
+        private javax.swing.JMenuItem jMenuItem4;
+        private javax.swing.JMenuItem jMenuItem5;
+        private javax.swing.JMenuItem jMenuItem6;
+        private javax.swing.JMenuItem jMenuItem7;
+        private javax.swing.JPanel jPanel1;
+        private javax.swing.JPanel jPanel2;
+        private javax.swing.JPanel jPanel3;
+        private javax.swing.JPanel jPanel4;
+        private javax.swing.JPanel jPanel5;
+        private javax.swing.JPanel jPanel6;
+        private javax.swing.JPopupMenu jPopupMenu1;
+        private javax.swing.JSeparator jSeparator1;
+        private JSpinLoader jSpinLoader1;
+        private javax.swing.JSpinner jSpinner1;
+        private javax.swing.JSpinner jSpinner4;
+        private javax.swing.JLabel leechers;
+        private javax.swing.JButton openFileButton;
+        private javax.swing.JLabel peer_id;
+        private javax.swing.JLabel seeders;
+        private javax.swing.JLabel size;
+        private javax.swing.JLabel torrent_name;
+        private javax.swing.JLabel tracker;
+        private javax.swing.JLabel update;
+        private javax.swing.JLabel uploaded;
+        // End of variables declaration//GEN-END:variables
 }
