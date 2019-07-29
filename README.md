@@ -23,5 +23,5 @@ Or by issuing the following command in a console
 	$ java -jar jratiobosst.jar
 
 ## Images 
-![swing screenshot](https://i.imgur.com/H6QRLGE.png)
+![swing screenshot](https://i.imgur.com/8G9l9Ra.png)
 screenshot of swing GUI version
