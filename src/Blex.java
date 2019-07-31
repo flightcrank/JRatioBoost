@@ -15,7 +15,7 @@ class Blex {
 	ArrayList<TokenElement> tokenList; //array of all token elements and data
 	boolean valid = false;
 
-	public Blex (String fileName) {
+	Blex(String fileName) {
 		
 		tokenList = new ArrayList<TokenElement>();
 		valid = this.readFile(fileName);
@@ -85,16 +85,25 @@ class Blex {
 						
 						prevToken.value = len.toString().getBytes();
 					}
-
+					
 					//populate tokens instance variables
 					token.type = TokenElement.Token.END;
 					token.position = fChan.position();
-					token.endIndex = stack.peek();//store the index of the TOKEN this END token ends.
+					
+					if (stack.size() != 0) {
+						
+						token.endIndex = stack.peek();//store the index of the TOKEN this END token ends.
+					}
+					
 					this.tokenList.add(token);
 
 					len.delete(0, len.length());//could be end of an integer so clear the len StringBuffer for the next time a string of numbers is encountered
-					stack.pop();
-
+					
+					if (stack.size() != 0) {
+						
+						stack.pop();
+					}
+					
 					//populate the endIndex field of the calling token with the index of this END token
 					int index = this.tokenList.size() - 1;//-1 to obtain index number size
 					startToken = this.tokenList.get(token.endIndex);

@@ -371,7 +371,9 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel4.add(torrent_name, gridBagConstraints);
 
                 jSpinLoader1.setMinimumSize(new java.awt.Dimension(30, 30));
-                jPanel4.add(jSpinLoader1, new java.awt.GridBagConstraints());
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                jPanel4.add(jSpinLoader1, gridBagConstraints);
 
                 jPanel6.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
@@ -636,7 +638,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				JOptionPane.showMessageDialog(jPanel6, "Error: IO error. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
 				ex.printStackTrace();
 				stopAction();
-				
+								
 			} catch (Exception ex) {
 
 				JOptionPane.showMessageDialog(jPanel6, "Error: " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
