@@ -11,80 +11,103 @@ class TrackerConnect {
 	String leechers;
 	String interval;
 	String minInterval;
+	String port;
+	boolean valid;
 	TorrentInfo tInfo;
 
-	TrackerConnect(TorrentInfo tInfo) {
+	TrackerConnect(TorrentInfo tInfo, String port) throws MalformedURLException, IOException, Exception {
 	
 		this.tInfo = tInfo;
+		this.valid = false;
+		this.port = port;
 		connect();
 	}
 
 	//request to start a new torrent connection to tracker. using this method with no arguments will
 	//also send the events=started message to the tracker.
-	public void connect() {
+	public void connect() throws MalformedURLException, IOException, Exception {
 		
 		URL tracker;
 		URLConnection conn = null;
-		String queryString = String.format("?info_hash=%s&peer_id=%s&port=6881&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1));
-		String request = String.format("%s%s", tInfo.announce, queryString);
+		
+		//check if the annouce URL in the torrent file has a query sting already in it.
+		char q = (tInfo.announce.contains("?") == true) ? '&' : '?';  
+		
+		String queryString = String.format("info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), this.port);
+		String request = String.format("%s%s%s", tInfo.announce, q, queryString);
+		
+		System.out.println(request);
 		
 		//connect to torrent tracker
-		try {
-			tracker = new URL(request);
-			conn = tracker.openConnection();
-			System.out.println("connection timeout " + conn.getReadTimeout());
-		
-		} catch (MalformedURLException e) {
-
-			System.out.println("URL Error:" + e);		
-		
-		} catch (IOException e) {
+		tracker = new URL(request);
+		conn = tracker.openConnection();
+		System.out.println("connection timeout " + conn.getReadTimeout());
 			
-			System.out.println("Connection Error:" + e);		
-		}
-	
 		if (conn != null) {
 
 			Blex blex = responce(conn);
 			
 			if (blex.valid) {
 				
+				valid = true;
+				checkFailResponse(blex.tokenList);
 				setInfo(blex.tokenList);
+			
+			} else {
+				
+				valid = false;
+				throw new Exception("Invalid bencoded responce.");
 			}
 		}
 	}
 
 	//request to send upload and download data to tracker. Note this method omits the "event" key in the 
 	//query string as this overloaded method is for updating the ongoing connection
-	public void connect(String uploaded, String downloaded) {
+	public void connect(String uploaded, String downloaded) throws MalformedURLException, IOException, Exception {
 	
 		URL tracker;
 		URLConnection conn = null;
-		String queryString = String.format("?info_hash=%s&peer_id=%s&port=6881&uploaded=%s&downloaded=%s&left=0&compact=1", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), uploaded, downloaded);
-		String request = String.format("%s%s", tInfo.announce, queryString);
+		
+		//check if the annouce URL in the torrent file has a query sting already in it.
+		char q = (tInfo.announce.contains("?") == true) ? '&' : '?';  
+		
+		String queryString = String.format("info_hash=%s&peer_id=%s&port=%s&uploaded=%s&downloaded=%s&left=0&compact=1", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), this.port, uploaded, downloaded);
+		String request = String.format("%s%s%s", tInfo.announce, q, queryString);
 		System.out.println(request);
 		
 		//connect to torrent tracker
-		try {
-			tracker = new URL(request);
-			conn = tracker.openConnection();
-		
-		} catch (MalformedURLException e) {
-
-			System.out.println("URL Error:" + e);		
-		
-		} catch (IOException e) {
-			
-			System.out.println("Connection Error:" + e);		
-		}
-		
+		tracker = new URL(request);
+		conn = tracker.openConnection();
+				
 		if (conn != null) {
 
 			Blex blex = responce(conn);
 			
 			if (blex.valid) {
 				
+				valid = true;
+				checkFailResponse(blex.tokenList);
 				setInfo(blex.tokenList);
+			
+			} else {
+				
+				valid = false;
+				throw new Exception("Invalid bencoded responce.");
+			}
+		}
+	}
+	
+	private void checkFailResponse(ArrayList<TokenElement> tokenList) throws Exception {
+	
+		for (int i = 0; i < tokenList.size(); i++) {
+			
+			String str = tokenList.get(i).getValueString();
+			
+			if (str != null && str.equals("failure reason")) {
+				
+				this.valid = false;
+				String failReason = tokenList.get(i + 1).getValueString();
+				throw new Exception("\nTracker Failure Reason: " + failReason);
 			}
 		}
 	}
@@ -118,48 +141,29 @@ class TrackerConnect {
 		}
 	}
 
-	private Blex responce(URLConnection conn) {
+	private Blex responce(URLConnection conn) throws FileNotFoundException, IOException {
 		
 		File tempFile;
 
 		//create a temp file to store the trackers bencoded response
-		try { 
+		tempFile = File.createTempFile("responce", ".dat");
 
-			tempFile = File.createTempFile("responce", ".dat");
-			
-			//get the responce from the URL
-			try (InputStream responce = conn.getInputStream();) {
-				
-				//open the temp file to write too
-				try (FileOutputStream fileOut = new FileOutputStream(tempFile);) {
+		//get the responce from the URL
+		InputStream responce = conn.getInputStream();
 
-					int index;
+		//open the temp file to write too
+		FileOutputStream fileOut = new FileOutputStream(tempFile);
 
-					do {
-						
-						index = responce.read();
-						fileOut.write(index);
-					
-					} while (index > -1);
+		int index;
 
-				} catch (FileNotFoundException e) {
-					
-					System.out.println("Could not open temp file: " + e);
-				}
+		do {
 
-			} catch (IOException e) {
-			
-				System.out.println("Tracker responce error:" + e);
-			}
-		
-			return new Blex(tempFile.getPath());
-		
-		} catch (IOException e) {
-			
-			System.out.println("Create File error:" + e);		
-		}
+			index = responce.read();
+			fileOut.write(index);
 
-		return null;
+		} while (index > -1);
+
+		return new Blex(tempFile.getPath());
 	}
 
 	public String toString() {

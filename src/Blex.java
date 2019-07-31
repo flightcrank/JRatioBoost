@@ -15,7 +15,7 @@ class Blex {
 	ArrayList<TokenElement> tokenList; //array of all token elements and data
 	boolean valid = false;
 
-	Blex(String fileName) {
+	public Blex (String fileName) {
 		
 		tokenList = new ArrayList<TokenElement>();
 		valid = this.readFile(fileName);

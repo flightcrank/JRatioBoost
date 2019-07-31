@@ -3,6 +3,8 @@ import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Timer;
@@ -20,10 +22,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 	long upAmount = 0;
 	TorrentInfo tInfo;
 	TrackerConnect tc;
+	String port;
 	Timer timer;
 
 	public JRatioBoost() {
-
+		
+		this.port = "6881";
 		initComponents();
 	}
 
@@ -37,8 +41,10 @@ public class JRatioBoost extends javax.swing.JFrame {
                 changeClient = new javax.swing.JMenu();
                 jPopupMenu1.add(changeTracker);
                 jPopupMenu1.add(changeClient);
+                jMenuItem1 = new javax.swing.JMenuItem();
                 jMenuItem3 = new javax.swing.JMenuItem();
                 jPopupMenu1.add(jMenuItem3);
+                jPopupMenu1.add(jMenuItem1);
                 jPopupMenu1.add(jSeparator1);
                 jMenuItem4 = new javax.swing.JMenuItem();
                 jPopupMenu1.add(jMenuItem4);
@@ -93,6 +99,13 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 changeClient.setText("Client");
                 changeClient.setEnabled(false);
+
+                jMenuItem1.setText("Update Port");
+                jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                jMenuItem1ActionPerformed(evt);
+                        }
+                });
 
                 jMenuItem3.setText("Update Interval");
                 jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
@@ -439,69 +452,90 @@ public class JRatioBoost extends javax.swing.JFrame {
                 pack();
         }// </editor-fold>//GEN-END:initComponents
 
-    private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileButtonActionPerformed
+        private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+                
+		UpdatePort c = new UpdatePort(this);
+		c.pack();
+		c.setLocationRelativeTo(null);
+		c.setVisible(true); 
+        }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-	FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
-	    fd.setVisible(true);
-	    changeTracker.setEnabled(false);
-	    changeClient.setEnabled(true);
+	private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 
-	    if (fd.getFile() != null) {
+		FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
+		fd.setVisible(true);
+		changeTracker.setEnabled(false);
+		changeClient.setEnabled(true);
 
-		    try {
+		if (fd.getFile() != null) {
 
-			    tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
+			try {
 
-			    //update Labels
-			    Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
-			    Matcher m = p.matcher(tInfo.announce);
+				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
 
-			    if (m.find()) {
+				//update Labels
+				Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+				Matcher m = p.matcher(tInfo.announce);
 
-				    tracker.setText(m.group().substring(1));
+				if (m.find()) {
 
-			    } else {
+					tracker.setText(m.group().substring(1));
 
-				    tracker.setText(tInfo.announce);
-			    }
+				} else {
 
-			    torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
-			    info_hash.setText(tInfo.hexString(tInfo.infoHash));
-			    peer_id.setText(tInfo.hexString(tInfo.peerId));
-			    size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-			    Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-			    date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
+					tracker.setText(tInfo.announce);
+				}
 
-			    //remove all item from the tracker submenu so any subsequent calls to
-			    //OpenAction doesn't continual add list of JMenuItems to the submenu
-			    changeTracker.removeAll();
+				torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
+				info_hash.setText(tInfo.hexString(tInfo.infoHash));
+				peer_id.setText(tInfo.hexString(tInfo.peerId));
+				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
+				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+				date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
 
-			    //if torrent has multiple trackers listed, add them to a popumenu list
-			    int arrSize = tInfo.announceList.size();
+				//remove all item from the tracker submenu so any subsequent calls to
+				//OpenAction doesn't continual add list of JMenuItems to the submenu
+				changeTracker.removeAll();
 
-			    if (arrSize > 0) {
+				//if torrent has multiple trackers listed, add them to a popumenu list
+				int arrSize = tInfo.announceList.size();
 
-				    changeTracker.setEnabled(true);
+				if (arrSize > 0) {
 
-				    for (String val : tInfo.announceList) {
+					changeTracker.setEnabled(true);
 
-					    JMenuItem item = changeTracker.add(val);
-					    item.addActionListener(new ChangeTrackerAction());
-				    }
-			    }
+					for (String val : tInfo.announceList) {
 
-		    } catch (Exception ex) {
+						JMenuItem item = changeTracker.add(val);
+						item.addActionListener(new ChangeTrackerAction());
+					}
+				}
 
-			    JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-			    ex.printStackTrace();
-		    }
-	    }
-    }//GEN-LAST:event_openFileButtonActionPerformed
+			} catch (Exception ex) {
 
-    private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_connectButtonActionPerformed
+				JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	private void stopAction() {
+	
+		openFileButton.setEnabled(true);
+		connectButton.setText("Connect");
+		jSpinLoader1.stop();
+		
+		if (timer != null) {
+			
+			timer.cancel();
+		}
+	}
+	
+	private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 	    
 		if (connectButton.getText().equals("Connect")) {
-
+			
+			tc = null;
 			openFileButton.setEnabled(false);
 			upAmount = 0;
 			connectButton.setText("Connecting..");
@@ -516,49 +550,46 @@ public class JRatioBoost extends javax.swing.JFrame {
 		//stop button was pressed
 		} else {
 
-			openFileButton.setEnabled(true);
-			connectButton.setText("Connect");
-			timer.cancel();
-			jSpinLoader1.stop();
+			stopAction();
 		}
-    }//GEN-LAST:event_connectButtonActionPerformed
+	}
 
-    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+	private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
 
-	    About a = new About();
-	    a.pack();
-	    a.setLocationRelativeTo(null);
-	    a.setVisible(true);
-    }//GEN-LAST:event_jMenuItem4ActionPerformed
+		About a = new About();
+		a.pack();
+		a.setLocationRelativeTo(null);
+		a.setVisible(true);
+	}
 
-        private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {                                           
 		
 		UpdateAmount ua = new UpdateAmount(tc);
 		ua.pack();
 		ua.setLocationRelativeTo(null);
 		ua.setVisible(true);          
-        }//GEN-LAST:event_jMenuItem3ActionPerformed
+        }
 
-        private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+        private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {                                           
                 
 		tInfo.computePeerId("KT5110");
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
-        }//GEN-LAST:event_jMenuItem5ActionPerformed
+        }
 
-        private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {                                           
 		
 		tInfo.computePeerId("TR2940");
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
-        }//GEN-LAST:event_jMenuItem6ActionPerformed
+        }
 
-        private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {                                           
 		
 		UpdateClient c = new UpdateClient(tInfo);
 		c.pack();
 		c.setLocationRelativeTo(null);
 		c.setVisible(true);          
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
-        }//GEN-LAST:event_jMenuItem7ActionPerformed
+        }
 
 	class ChangeTrackerAction implements ActionListener {
 
@@ -583,13 +614,36 @@ public class JRatioBoost extends javax.swing.JFrame {
 	}
 	
 	class ConnectTask extends SwingWorker<Void, Void> {
-		
+				
 		//execute this method in its own background thread
 		@Override
 		public Void doInBackground() {
 			
 			jPanel6.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			tc = new TrackerConnect(tInfo);
+			
+			try {
+			
+				tc = new TrackerConnect(tInfo, port);
+			
+			} catch (MalformedURLException ex) {
+				
+				JOptionPane.showMessageDialog(jPanel6, "Error: Malformed URL. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+				stopAction();
+			
+			} catch (IOException ex) {
+				
+				JOptionPane.showMessageDialog(jPanel6, "Error: IO error. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+				stopAction();
+				
+			} catch (Exception ex) {
+
+				JOptionPane.showMessageDialog(jPanel6, "Error: " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+				stopAction();
+			} 
+			
 			return null;
 		}
 		
@@ -599,11 +653,16 @@ public class JRatioBoost extends javax.swing.JFrame {
 		protected void done() {
 			
 			jPanel6.setCursor(null);
-			connectButton.setText("Stop");
 			
-			//send request at regular intervals
-			timer = new Timer();
-			timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+			//valid connection made
+			if (tc != null && tc.valid == true) {
+	
+				connectButton.setText("Stop");
+				
+				//send request at regular intervals
+				timer = new Timer();
+				timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+			}			
 		}
 	}
 	
@@ -632,12 +691,38 @@ public class JRatioBoost extends javax.swing.JFrame {
 				timer.cancel();
 				
 				//send get request to tracker with upload/download data
-				tc.connect(String.format("%d", upAmount), "0");
+				try {
+					
+					tc.connect(String.format("%d", upAmount), "0");
+				
+				} catch (MalformedURLException ex) {
+				
+					JOptionPane.showMessageDialog(jPanel6, "Error: Malformed URL. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+					stopAction();
+			
+				} catch (IOException ex) {
+					
+					JOptionPane.showMessageDialog(jPanel6, "Error: IO Exception. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+					stopAction();
+	
+				} catch (Exception ex) {
+					
+					JOptionPane.showMessageDialog(jPanel6, "Error: Tracker failue responce. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+					ex.printStackTrace();
+					stopAction();
+				}
+				
 				nextUpdate = Integer.parseInt(tc.interval);
 				
-				//the new http request has been made, start a new timer task
-				timer = new Timer();
-				timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+				//valid connection made
+				if (tc != null && tc.valid == true) {
+				
+					//the new http request has been made, start a new timer task
+					timer = new Timer();
+					timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
+				}
 			}
 			
 			nextUpdate--;
@@ -698,6 +783,7 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JLabel jLabel7;
         private javax.swing.JLabel jLabel8;
         private javax.swing.JLabel jLabel9;
+        private javax.swing.JMenuItem jMenuItem1;
         private javax.swing.JMenuItem jMenuItem3;
         private javax.swing.JMenuItem jMenuItem4;
         private javax.swing.JMenuItem jMenuItem5;

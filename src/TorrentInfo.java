@@ -64,10 +64,15 @@ class TorrentInfo {
 		peerId[5] = b[4];
 		peerId[6] = b[5];
 		peerId[7] = (byte) '-';
-	}
+		
+		System.out.print("Client Version: ");
 
-	public void updateClient(String client) {
-
+		for (int i = 0; i < 8; i++) {
+			
+			System.out.print((char) peerId[i]);
+		}
+		
+		System.out.println();
 	}
 
 	//covert info hash or peer id to a hexadecimal string
