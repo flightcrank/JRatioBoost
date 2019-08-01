@@ -453,15 +453,23 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 pack();
         }// </editor-fold>//GEN-END:initComponents
-
-        private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-                
-		UpdatePort c = new UpdatePort(this);
-		c.pack();
-		c.setLocationRelativeTo(null);
-		c.setVisible(true); 
-        }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+	
+	private void stopAction() {
+	
+		openFileButton.setEnabled(true);
+		connectButton.setText("Connect");
+		jMenuItem1.setEnabled(true);
+		jSpinLoader1.stop();
+		
+		if (timer != null) {
+			
+			timer.cancel();
+			
+		}
+		
+		timer = null;
+	}
+	
 	private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 
 		FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
@@ -521,27 +529,13 @@ public class JRatioBoost extends javax.swing.JFrame {
 		}
 	}
 	
-	private void stopAction() {
-	
-		openFileButton.setEnabled(true);
-		connectButton.setText("Connect");
-		jSpinLoader1.stop();
-		
-		if (timer != null) {
-			
-			timer.cancel();
-			
-		}
-		
-		timer = null;
-	}
-	
 	private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
 	    
 		if (connectButton.getText().equals("Connect")) {
 			
 			tc = null;
 			openFileButton.setEnabled(false);
+			jMenuItem1.setEnabled(false);
 			upAmount = 0;
 			connectButton.setText("Connecting..");
 			jSpinLoader1.start();
@@ -558,6 +552,14 @@ public class JRatioBoost extends javax.swing.JFrame {
 			stopAction();
 		}
 	}
+	
+        private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+                
+		UpdatePort c = new UpdatePort(this);
+		c.pack();
+		c.setLocationRelativeTo(null);
+		c.setVisible(true); 
+        }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 	private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {                                           
 
@@ -596,6 +598,37 @@ public class JRatioBoost extends javax.swing.JFrame {
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
         }
 
+	public static void main(String args[]) {
+
+		SwingUtilities.invokeLater(new Runnable() {
+
+			public void run() {
+
+				//Use native look and feel
+				try {
+					//for linux systems just use nimbus look and feel
+					if (System.getProperty("os.name").equals("Linux")) {
+
+						//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
+						UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+
+					} else {
+
+						//native l&f
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					}
+
+				} catch (Exception e) {
+
+					System.out.println(e);
+				}
+
+				//create and show the Swing GUI
+				new JRatioBoost().setVisible(true);
+			}
+		});
+	}
+	
 	class ChangeTrackerAction implements ActionListener {
 
 		@Override
@@ -676,7 +709,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 		@Override
 		public void run() {
 			
-			System.err.println(System.nanoTime());
 			int upSpeed = (Integer) jSpinner1.getValue();
 			upAmount += SizeConvert.KBToB(upSpeed);
 			
@@ -733,37 +765,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 			nextUpdate--;
 			tc.interval = String.format("%d", nextUpdate);
 		}
-	}
-
-	public static void main(String args[]) {
-
-		SwingUtilities.invokeLater(new Runnable() {
-
-			public void run() {
-
-				//Use native look and feel
-				try {
-					//for linux systems just use nimbus look and feel
-					if (System.getProperty("os.name").equals("Linux")) {
-
-						//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-						UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-
-					} else {
-
-						//native l&f
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					}
-
-				} catch (Exception e) {
-
-					System.out.println(e);
-				}
-
-				//create and show the Swing GUI
-				new JRatioBoost().setVisible(true);
-			}
-		});
 	}
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
