@@ -476,12 +476,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
 
 				//update Labels
-				Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+				Pattern p = Pattern.compile("[^\\/]+\\.[comorgnetvlub]{2,4}");
 				Matcher m = p.matcher(tInfo.announce);
 
 				if (m.find()) {
 
-					tracker.setText(m.group().substring(1));
+					tracker.setText(m.group());
 
 				} else {
 
@@ -530,7 +530,10 @@ public class JRatioBoost extends javax.swing.JFrame {
 		if (timer != null) {
 			
 			timer.cancel();
+			
 		}
+		
+		timer = null;
 	}
 	
 	private void connectButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
@@ -673,6 +676,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		@Override
 		public void run() {
 			
+			System.err.println(System.nanoTime());
 			int upSpeed = (Integer) jSpinner1.getValue();
 			upAmount += SizeConvert.KBToB(upSpeed);
 			
@@ -718,17 +722,15 @@ public class JRatioBoost extends javax.swing.JFrame {
 				
 				nextUpdate = Integer.parseInt(tc.interval);
 				
-				//valid connection made
-				if (tc != null && tc.valid == true) {
-				
-					//the new http request has been made, start a new timer task
+				//the new http request has been made, start a new timer task
+				if (timer != null) {
+					
 					timer = new Timer();
 					timer.scheduleAtFixedRate(new UpdateTask(), 1000, 1000);
 				}
 			}
-			
+
 			nextUpdate--;
-			
 			tc.interval = String.format("%d", nextUpdate);
 		}
 	}
