@@ -58,6 +58,7 @@ class SizeConvert {
 		return kb * 1024;
 	}
 	
+	@Override
 	public String toString() {
 		
 		return String.format("%.02f %s", value, size);

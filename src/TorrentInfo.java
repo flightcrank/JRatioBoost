@@ -1,3 +1,4 @@
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
@@ -21,9 +22,9 @@ class TorrentInfo {
 	public static final int INFO_HASH = 0;
 	public static final int PEER_ID = 1;
 
-	public TorrentInfo(String fileName) throws Exception {
+	public TorrentInfo(FileInputStream file) throws IOException, Exception {
 		
-		Blex lexTree = new Blex(fileName);
+		Blex lexTree = new Blex(file);
 
 		if (lexTree.valid) {
 			
@@ -32,7 +33,7 @@ class TorrentInfo {
 			peerId = new byte[20]; 
 			
 			setInfo(lexTree.tokenList);
-			computeInfoHash(lexTree.tokenList, fileName);
+			computeInfoHash(lexTree.tokenList, file);
 			computePeerId("KT5110");
 
 		} else {
@@ -207,7 +208,7 @@ class TorrentInfo {
 	}
 	
 	//calculate the infoHash
-	private void computeInfoHash(ArrayList<TokenElement> tokenList, String fileName) {
+	private void computeInfoHash(ArrayList<TokenElement> tokenList, FileInputStream file) throws IOException{
 		
 		TokenElement[] tokenArray = new TokenElement[tokenList.size()];
 		long startOffset = 0;
@@ -228,29 +229,22 @@ class TorrentInfo {
 				endOffset = endToken.position;
 			}
 		}
+	
+		long len = endOffset - startOffset;
+		byte[] hashData = new byte[(int)len];
+		FileChannel fChan = file.getChannel(); //object to obtain offset current position within the file
 
-		try (FileInputStream file = new FileInputStream(fileName)) {
-			
-			long len = endOffset - startOffset;
-			byte[] hashData = new byte[(int)len];
-			FileChannel fChan = file.getChannel(); //object to obtain offset current position within the file
-			
-			fChan.position(startOffset);
-			file.read(hashData);
-						
-			try {
+		fChan.position(startOffset);
+		file.read(hashData);
 
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				this.infoHash = md.digest(hashData);
+		try {
 
-			} catch (NoSuchAlgorithmException e) {
+			MessageDigest md = MessageDigest.getInstance("SHA-1");
+			this.infoHash = md.digest(hashData);
 
-				System.out.println("error:" + e);
-			}
+		} catch (NoSuchAlgorithmException e) {
 
-		} catch (IOException e) {
-			
-			System.out.println("error: " + e);
+			System.out.println("error:" + e);
 		}
 	}
 }

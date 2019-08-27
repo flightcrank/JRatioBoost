@@ -3,6 +3,8 @@ import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
@@ -389,7 +391,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 jPanel5.add(jLabel6, gridBagConstraints);
 
-                jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 9999, 1));
+                jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 999999, 1));
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 2;
                 gridBagConstraints.gridy = 0;
@@ -478,10 +480,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 		changeClient.setEnabled(true);
 
 		if (fd.getFile() != null) {
+			
+			String filePath = fd.getFiles()[0].getPath();
+			
+			try (FileInputStream file = new FileInputStream(filePath)){
 
-			try {
-
-				tInfo = new TorrentInfo(fd.getFiles()[0].getPath());
+				tInfo = new TorrentInfo(file);
 
 				//update Labels
 				Pattern p = Pattern.compile("[^\\/]+\\.[comorgnetvlub]{2,4}");
@@ -521,6 +525,16 @@ public class JRatioBoost extends javax.swing.JFrame {
 					}
 				}
 
+			} catch (FileNotFoundException ex) {
+
+				JOptionPane.showMessageDialog(this, "Error: Could not find file \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+			
+			} catch (IOException ex) {
+
+				JOptionPane.showMessageDialog(this, "IO Error: Could not read file contence \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+				ex.printStackTrace();
+			
 			} catch (Exception ex) {
 
 				JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
@@ -637,12 +651,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 			JMenuItem item = (JMenuItem) e.getSource();
 			tInfo.announce = item.getText();
 
-			Pattern p = Pattern.compile("\\.\\w+\\.\\w+{2,3}");
+			Pattern p = Pattern.compile("[^\\/]+\\.[comorgnetvlub]{2,4}");
 			Matcher m = p.matcher(tInfo.announce);
 
 			if (m.find()) {
 
-				tracker.setText(m.group().substring(1));
+				tracker.setText(m.group());
 
 			} else {
 

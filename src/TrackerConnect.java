@@ -1,3 +1,4 @@
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -7,13 +8,13 @@ import java.util.ArrayList;
 //class to connect to a remore torrent tracker and issue HTML GET requests
 class TrackerConnect {
 	
-	String seeders;
-	String leechers;
-	String interval;
-	String minInterval;
-	String port;
-	boolean valid;
-	TorrentInfo tInfo;
+	public String seeders;
+	public String leechers;
+	public String interval;
+	public String minInterval;
+	public String port;
+	public boolean valid;
+	public TorrentInfo tInfo;
 
 	TrackerConnect(TorrentInfo tInfo, String port) throws MalformedURLException, IOException, Exception {
 	
@@ -25,7 +26,7 @@ class TrackerConnect {
 
 	//request to start a new torrent connection to tracker. using this method with no arguments will
 	//also send the events=started message to the tracker.
-	public void connect() throws MalformedURLException, IOException, Exception {
+	public final void connect() throws MalformedURLException, IOException, Exception {
 		
 		URL tracker;
 		URLConnection conn = null;
@@ -38,42 +39,27 @@ class TrackerConnect {
 		
 		System.out.println(request);
 		
-		//connect to torrent tracker
-		tracker = new URL(request);
-		conn = tracker.openConnection();
-		System.out.println("connection timeout " + conn.getReadTimeout());
-			
-		if (conn != null) {
-
-			Blex blex = responce(conn);
-			
-			if (blex.valid) {
-				
-				valid = true;
-				checkFailResponse(blex.tokenList);
-				setInfo(blex.tokenList);
-			
-			} else {
-				
-				valid = false;
-				throw new Exception("Invalid bencoded responce.");
-			}
-		}
+		this.doRequest(request);
 	}
 
 	//request to send upload and download data to tracker. Note this method omits the "event" key in the 
 	//query string as this overloaded method is for updating the ongoing connection
-	public void connect(String uploaded, String downloaded) throws MalformedURLException, IOException, Exception {
-	
-		URL tracker;
-		URLConnection conn = null;
-		
+	public final void connect(String uploaded, String downloaded) throws MalformedURLException, IOException, Exception {
+
 		//check if the annouce URL in the torrent file has a query sting already in it.
 		char q = (tInfo.announce.contains("?") == true) ? '&' : '?';  
 		
 		String queryString = String.format("info_hash=%s&peer_id=%s&port=%s&uploaded=%s&downloaded=%s&left=0&compact=1", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), this.port, uploaded, downloaded);
 		String request = String.format("%s%s%s", tInfo.announce, q, queryString);
 		System.out.println(request);
+		
+		this.doRequest(request);
+	}
+	
+	private void doRequest(String request) throws MalformedURLException, FileNotFoundException, IOException, Exception {
+		
+		URL tracker;
+		URLConnection conn = null;
 		
 		//connect to torrent tracker
 		tracker = new URL(request);
@@ -163,9 +149,10 @@ class TrackerConnect {
 
 		} while (index > -1);
 
-		return new Blex(tempFile.getPath());
+		return new Blex(new FileInputStream(tempFile.getPath()));
 	}
 
+	@Override
 	public String toString() {
 	
 		return String.format("Tracker Connect: [seeders:%s leechers:%s interval:%s min interval:%s]", seeders, leechers, interval, minInterval);
