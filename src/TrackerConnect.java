@@ -60,10 +60,12 @@ class TrackerConnect {
 		
 		URL tracker;
 		URLConnection conn = null;
+		String userAgent = getUserAgent();
 		
 		//connect to torrent tracker
 		tracker = new URL(request);
 		conn = tracker.openConnection();
+		conn.setRequestProperty("User-Agent", userAgent);
 				
 		if (conn != null) {
 
@@ -81,6 +83,37 @@ class TrackerConnect {
 				throw new Exception("Invalid bencoded responce.");
 			}
 		}
+	}
+	
+	private String getUserAgent() {
+		
+		String userAgent;
+		char[] client = {(char)tInfo.peerId[1], (char)tInfo.peerId[2]};
+		char[] ver = {(char)tInfo.peerId[3],(char)tInfo.peerId[4],(char)tInfo.peerId[5],(char)tInfo.peerId[6]};
+		
+		switch (new String(client)) {
+			
+			case "KT":
+				userAgent = "Ktorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				break;
+			case "TR":
+				userAgent = "Transmission/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				break;
+			case "JT":
+				userAgent = "JavaTorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				break;
+			case "qB":
+				userAgent = "qBittorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				break;
+			case "UT":
+				userAgent = "µTorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				break;
+				
+			default:
+				userAgent = "Ktorrent/5.1.1";
+		}
+		
+		return userAgent;
 	}
 	
 	private void checkFailResponse(ArrayList<TokenElement> tokenList) throws Exception {
