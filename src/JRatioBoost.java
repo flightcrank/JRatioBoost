@@ -488,12 +488,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 				tInfo = new TorrentInfo(file);
 
 				//update Labels
-				Pattern p = Pattern.compile("[^\\/]+\\.[comorgnetvlub]{2,4}");
+				Pattern p = Pattern.compile("//[a-z.]+");
 				Matcher m = p.matcher(tInfo.announce);
 
 				if (m.find()) {
 
-					tracker.setText(m.group());
+					tracker.setText(m.group().substring(2));
 
 				} else {
 

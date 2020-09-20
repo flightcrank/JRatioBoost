@@ -94,7 +94,7 @@ class TrackerConnect {
 		switch (new String(client)) {
 			
 			case "KT":
-				userAgent = "Ktorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
+				userAgent = "KTorrent/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
 				break;
 			case "TR":
 				userAgent = "Transmission/" + ver[0] + "." + ver[1] + "." + ver[2]+ "." + ver[3];
@@ -110,7 +110,7 @@ class TrackerConnect {
 				break;
 				
 			default:
-				userAgent = "Ktorrent/5.1.1";
+				userAgent = "KTorrent/5.1.1";
 		}
 		
 		return userAgent;
