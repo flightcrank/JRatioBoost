@@ -504,8 +504,16 @@ public class JRatioBoost extends javax.swing.JFrame {
 				info_hash.setText(tInfo.hexString(tInfo.infoHash));
 				peer_id.setText(tInfo.hexString(tInfo.peerId));
 				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-				date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
+				
+				if (tInfo.creationDate != null) {
+					
+					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+					date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
+				
+				} else {
+					
+					date.setText("Unknown");
+				}
 
 				//remove all item from the tracker submenu so any subsequent calls to
 				//OpenAction doesn't continual add list of JMenuItems to the submenu
