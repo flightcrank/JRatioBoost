@@ -3,6 +3,7 @@ import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
@@ -27,10 +29,16 @@ public class JRatioBoost extends javax.swing.JFrame {
 	String port;
 	Timer timer;
 
-	public JRatioBoost() {
+	public JRatioBoost(String[] args) {
 		
 		this.port = "6881";
 		initComponents();
+		
+		if (args[0] != null) {
+			
+			openTorrentFile(args[0]);
+		}
+		
 	}
 
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -472,82 +480,89 @@ public class JRatioBoost extends javax.swing.JFrame {
 		timer = null;
 	}
 	
-	private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
-
-		FileDialog fd = new FileDialog(this, "Choose a file", FileDialog.LOAD);
-		fd.setVisible(true);
+	private void openTorrentFile(String filePath) {
+		
 		changeTracker.setEnabled(false);
 		changeClient.setEnabled(true);
 
-		if (fd.getFile() != null) {
-			
-			String filePath = fd.getFiles()[0].getPath();
-			
-			try (FileInputStream file = new FileInputStream(filePath)){
+		try (FileInputStream file = new FileInputStream(filePath)){
 
-				tInfo = new TorrentInfo(file);
+			tInfo = new TorrentInfo(file);
 
-				//update Labels
-				Pattern p = Pattern.compile("//[a-z.]+");
-				Matcher m = p.matcher(tInfo.announce);
+			//update Labels
+			Pattern p = Pattern.compile("//[a-z.]+");
+			Matcher m = p.matcher(tInfo.announce);
 
-				if (m.find()) {
+			if (m.find()) {
 
-					tracker.setText(m.group().substring(2));
+				tracker.setText(m.group().substring(2));
 
-				} else {
+			} else {
 
-					tracker.setText(tInfo.announce);
-				}
-
-				torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
-				info_hash.setText(tInfo.hexString(tInfo.infoHash));
-				peer_id.setText(tInfo.hexString(tInfo.peerId));
-				size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
-				
-				if (tInfo.creationDate != null) {
-					
-					Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
-					date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
-				
-				} else {
-					
-					date.setText("Unknown");
-				}
-
-				//remove all item from the tracker submenu so any subsequent calls to
-				//OpenAction doesn't continual add list of JMenuItems to the submenu
-				changeTracker.removeAll();
-
-				//if torrent has multiple trackers listed, add them to a popumenu list
-				int arrSize = tInfo.announceList.size();
-
-				if (arrSize > 0) {
-
-					changeTracker.setEnabled(true);
-
-					for (String val : tInfo.announceList) {
-
-						JMenuItem item = changeTracker.add(val);
-						item.addActionListener(new ChangeTrackerAction());
-					}
-				}
-
-			} catch (FileNotFoundException ex) {
-
-				JOptionPane.showMessageDialog(this, "Error: Could not find file \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				ex.printStackTrace();
-			
-			} catch (IOException ex) {
-
-				JOptionPane.showMessageDialog(this, "IO Error: Could not read file contence \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				ex.printStackTrace();
-			
-			} catch (Exception ex) {
-
-				JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				ex.printStackTrace();
+				tracker.setText(tInfo.announce);
 			}
+
+			torrent_name.setText("<html><font size=5>" + tInfo.name + "</font><html>");
+			info_hash.setText(tInfo.hexString(tInfo.infoHash));
+			peer_id.setText(tInfo.hexString(tInfo.peerId));
+			size.setText(new SizeConvert(Long.parseLong(tInfo.size)).toString());
+
+			if (tInfo.creationDate != null) {
+
+				Date d = new Date(Long.parseLong(tInfo.creationDate) * 1000);
+				date.setText(DateFormat.getDateInstance(DateFormat.SHORT).format(d));
+
+			} else {
+
+				date.setText("Unknown");
+			}
+
+			//remove all item from the tracker submenu so any subsequent calls to
+			//OpenAction doesn't continual add list of JMenuItems to the submenu
+			changeTracker.removeAll();
+
+			//if torrent has multiple trackers listed, add them to a popumenu list
+			int arrSize = tInfo.announceList.size();
+
+			if (arrSize > 0) {
+
+				changeTracker.setEnabled(true);
+
+				for (String val : tInfo.announceList) {
+
+					JMenuItem item = changeTracker.add(val);
+					item.addActionListener(new ChangeTrackerAction());
+				}
+			}
+
+		} catch (FileNotFoundException ex) {
+
+			JOptionPane.showMessageDialog(this, "Error: Could not find file \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+			ex.printStackTrace();
+
+		} catch (IOException ex) {
+
+			JOptionPane.showMessageDialog(this, "IO Error: Could not read file contence \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+			ex.printStackTrace();
+
+		} catch (Exception ex) {
+
+			JOptionPane.showMessageDialog(this, "Error: Invalid torrent file. \n" + ex, "Error message", JOptionPane.ERROR_MESSAGE);
+			ex.printStackTrace();
+		}
+	}
+	
+	private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
+		
+		JFileChooser jfc = new JFileChooser(".");
+		int res = jfc.showDialog(this, "open");
+		
+		changeTracker.setEnabled(false);
+		changeClient.setEnabled(true);
+
+		if (res == JFileChooser.APPROVE_OPTION) {
+			
+			openTorrentFile(jfc.getSelectedFile().getAbsolutePath());
 		}
 	}
 	
@@ -646,7 +661,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				}
 
 				//create and show the Swing GUI
-				new JRatioBoost().setVisible(true);
+				new JRatioBoost(args).setVisible(true);
 			}
 		});
 	}
