@@ -34,11 +34,10 @@ public class JRatioBoost extends javax.swing.JFrame {
 		this.port = "6881";
 		initComponents();
 		
-		if (args[0] != null) {
+		if (args.length > 0) {
 			
 			openTorrentFile(args[0]);
 		}
-		
 	}
 
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
