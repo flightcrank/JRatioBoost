@@ -1,12 +1,8 @@
 
 import java.awt.Cursor;
-import java.awt.FileDialog;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,13 +14,11 @@ import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.ImageIcon;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
-import javax.swing.TransferHandler;
 import javax.swing.UIManager;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -107,6 +101,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 connectButton = new javax.swing.JButton();
                 jSpinLoader1 = new JSpinLoader(25, 25, connectButton);
                 connectButton.setIcon(new ImageIcon(jSpinLoader1.createSpinnerImage(25, 25, 0f)));
+                //connectButton.setHorizontalTextPosition(textPosition);
                 jArrow1 = new JArrow();
 
                 changeTracker.setText("Tracker");
@@ -413,6 +408,8 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel5.add(jSpinner1, gridBagConstraints);
 
                 connectButton.setText("Connect");
+                connectButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                connectButton.setIconTextGap(10);
                 connectButton.setMargin(new java.awt.Insets(0, 10, 0, 10));
                 connectButton.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -496,6 +493,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 				date.setText("Unknown");
 			}
+			
+			this.pack();
 
 			//remove all item from the tracker submenu so any subsequent calls to
 			//OpenAction doesn't continual add list of JMenuItems to the submenu
