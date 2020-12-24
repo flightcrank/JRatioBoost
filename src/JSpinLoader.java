@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 public class JSpinLoader extends JComponent {
@@ -10,6 +11,7 @@ public class JSpinLoader extends JComponent {
 	double rot = 0;
 	double speed = .05;
 	boolean clockwise = true;
+	ImageIcon spinnerIcon = null;
 	Timer timer;
 	ActionListener taskPerformer;
 	
@@ -25,6 +27,22 @@ public class JSpinLoader extends JComponent {
 				
 				animate();
 				repaint();
+			}
+		};
+	}
+	
+	public JSpinLoader(int width, int height, JButton jb) {
+		
+		setDoubleBuffered(true);
+		setPreferredSize(new Dimension(30, 30));
+
+		taskPerformer = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent evt) {
+
+				animate();
+				jb.setIcon(new ImageIcon(createSpinnerImage(width, height, rot)));
 			}
 		};
 	}
@@ -66,9 +84,8 @@ public class JSpinLoader extends JComponent {
 		
 		this.speed = num;
 	}
-
-
-	 private void animate() {
+	
+	private void animate() {
 		
 		if (clockwise == true) {
 
@@ -84,7 +101,32 @@ public class JSpinLoader extends JComponent {
 			rot = 0;
 		}
 	}
+	
+	public  BufferedImage createSpinnerImage(int width, int height, double direction) { 
+		
+		BufferedImage spinnerImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g2d = spinnerImage.createGraphics();
+		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2d.setColor(new Color(150, 150, 150));
+		
+		int centerX = width / 2;
+		int centerY = height / 2;
+		double angleAmount = (2 * Math.PI) / numSteps;
+		int radius = centerY - (int) (size / 2);
+		
+		g2d.translate(centerX, centerY);
+		g2d.rotate(direction);
 
+		for (int i = 0; i < numSteps; i++) {
+			
+			double x = Math.sin(angleAmount * i) * radius;
+			double y = Math.cos(angleAmount * i) * radius;
+			g2d.fillOval((int) x - (size / 2) ,(int) y - (size / 2) , size, size);
+		}
+		
+		return spinnerImage;
+	}
+	
 	public void draw(Graphics g) {
 	
 		Graphics2D g2d = (Graphics2D) g;

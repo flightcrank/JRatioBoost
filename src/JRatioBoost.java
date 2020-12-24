@@ -3,6 +3,9 @@ import java.awt.Cursor;
 import java.awt.FileDialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -14,12 +17,16 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.TransferHandler;
 import javax.swing.UIManager;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JRatioBoost extends javax.swing.JFrame {
 
@@ -37,6 +44,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		if (args.length > 0) {
 			
 			openTorrentFile(args[0]);
+			System.out.println("TEST");
 		}
 	}
 
@@ -63,7 +71,9 @@ public class JRatioBoost extends javax.swing.JFrame {
                 changeClient.add(jMenuItem5);
                 changeClient.add(jMenuItem6);
                 changeClient.add(jMenuItem7);
+                jSpinLoader1 = null;
                 jPanel6 = new javax.swing.JPanel();
+
                 jPanel6.setComponentPopupMenu(jPopupMenu1);
                 jPanel3 = new javax.swing.JPanel();
                 jPanel1 = new javax.swing.JPanel();
@@ -91,17 +101,13 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel4 = new javax.swing.JPanel();
                 openFileButton = new javax.swing.JButton();
                 torrent_name = new javax.swing.JLabel();
-                jSpinLoader1 = new JSpinLoader();
-                jSpinLoader1.setSize(6);
                 jPanel5 = new javax.swing.JPanel();
                 jLabel6 = new javax.swing.JLabel();
                 jSpinner1 = new javax.swing.JSpinner();
                 connectButton = new javax.swing.JButton();
-                jLabel7 = new javax.swing.JLabel();
-                jSpinner4 = new javax.swing.JSpinner();
+                jSpinLoader1 = new JSpinLoader(25, 25, connectButton);
+                connectButton.setIcon(new ImageIcon(jSpinLoader1.createSpinnerImage(25, 25, 0f)));
                 jArrow1 = new JArrow();
-                jArrow2 = new JArrow();
-                jArrow2.setDirection(JArrow.DOWN);
 
                 changeTracker.setText("Tracker");
                 changeTracker.setEnabled(false);
@@ -171,7 +177,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel1.add(jLabel1, gridBagConstraints);
 
                 jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -183,7 +189,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel1.add(jLabel3, gridBagConstraints);
 
                 jLabel4.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -195,7 +201,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 2;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel1.add(jLabel4, gridBagConstraints);
 
                 jLabel8.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -207,7 +213,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 3;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel1.add(jLabel8, gridBagConstraints);
 
                 jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -230,7 +236,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel1.add(tracker, gridBagConstraints);
 
                 info_hash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -239,7 +245,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridy = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel1.add(info_hash, gridBagConstraints);
 
                 peer_id.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -248,7 +254,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridy = 2;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel1.add(peer_id, gridBagConstraints);
 
                 size.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -257,7 +263,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridy = 3;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel1.add(size, gridBagConstraints);
 
                 date.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -282,7 +288,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel2.add(jLabel2, gridBagConstraints);
 
                 jLabel15.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -291,6 +297,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel2.add(jLabel15, gridBagConstraints);
 
                 jLabel16.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -299,6 +306,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel2.add(jLabel16, gridBagConstraints);
 
                 jLabel17.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -307,6 +315,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 jPanel2.add(jLabel17, gridBagConstraints);
 
                 jLabel18.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
@@ -323,25 +332,25 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(5, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel2.add(seeders, gridBagConstraints);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel2.add(leechers, gridBagConstraints);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel2.add(downloaded, gridBagConstraints);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 jPanel2.add(uploaded, gridBagConstraints);
 
                 update.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -379,32 +388,28 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.weightx = 1.0;
                 jPanel4.add(torrent_name, gridBagConstraints);
 
-                jSpinLoader1.setMinimumSize(new java.awt.Dimension(30, 30));
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-                jPanel4.add(jSpinLoader1, gridBagConstraints);
-
                 jPanel6.add(jPanel4, java.awt.BorderLayout.PAGE_START);
 
                 jPanel5.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
                 jPanel5.setLayout(new java.awt.GridBagLayout());
 
-                jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+                jLabel6.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
                 jLabel6.setText("Upload (kb/s)");
                 jLabel6.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
                 gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridx = 1;
                 gridBagConstraints.gridy = 0;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
                 jPanel5.add(jLabel6, gridBagConstraints);
 
-                jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 999999, 1));
+                jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 9999, 1));
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 2;
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 0.5;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
                 jPanel5.add(jSpinner1, gridBagConstraints);
 
                 connectButton.setText("Connect");
@@ -417,44 +422,20 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 3;
                 gridBagConstraints.gridy = 0;
-                gridBagConstraints.gridheight = 2;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.weightx = 0.5;
+                gridBagConstraints.ipadx = 5;
+                gridBagConstraints.ipady = 5;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
                 jPanel5.add(connectButton, gridBagConstraints);
-
-                jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-                jLabel7.setText("Download (kb/s)");
-                jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 0;
-                gridBagConstraints.gridy = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                jPanel5.add(jLabel7, gridBagConstraints);
-
-                jSpinner4.setModel(new javax.swing.SpinnerNumberModel(0, 0, 9999, 1));
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 2;
-                gridBagConstraints.gridy = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.weightx = 0.5;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
-                jPanel5.add(jSpinner4, gridBagConstraints);
 
                 jArrow1.setMinimumSize(new java.awt.Dimension(20, 20));
                 jArrow1.setPreferredSize(new java.awt.Dimension(20, 20));
                 gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 5);
                 jPanel5.add(jArrow1, gridBagConstraints);
-
-                jArrow2.setMinimumSize(new java.awt.Dimension(20, 20));
-                jArrow2.setPreferredSize(new java.awt.Dimension(20, 20));
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 1;
-                gridBagConstraints.gridy = 1;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 0, 0);
-                jPanel5.add(jArrow2, gridBagConstraints);
 
                 jPanel6.add(jPanel5, java.awt.BorderLayout.SOUTH);
 
@@ -554,6 +535,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 	private void openFileButtonActionPerformed(java.awt.event.ActionEvent evt) {                                               
 		
 		JFileChooser jfc = new JFileChooser(".");
+		FileNameExtensionFilter ff = new FileNameExtensionFilter("Torrents", "torrent");
+		jfc.setFileFilter(ff);
 		int res = jfc.showDialog(this, "open");
 		
 		changeTracker.setEnabled(false);
@@ -802,6 +785,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			tc.interval = String.format("%d", nextUpdate);
 		}
 	}
+	
 
         // Variables declaration - do not modify//GEN-BEGIN:variables
         private javax.swing.JMenu changeClient;
@@ -811,7 +795,6 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JLabel downloaded;
         private javax.swing.JLabel info_hash;
         private JArrow jArrow1;
-        private JArrow jArrow2;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel15;
         private javax.swing.JLabel jLabel16;
@@ -821,7 +804,6 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JLabel jLabel3;
         private javax.swing.JLabel jLabel4;
         private javax.swing.JLabel jLabel6;
-        private javax.swing.JLabel jLabel7;
         private javax.swing.JLabel jLabel8;
         private javax.swing.JLabel jLabel9;
         private javax.swing.JMenuItem jMenuItem1;
@@ -840,7 +822,6 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JSeparator jSeparator1;
         private JSpinLoader jSpinLoader1;
         private javax.swing.JSpinner jSpinner1;
-        private javax.swing.JSpinner jSpinner4;
         private javax.swing.JLabel leechers;
         private javax.swing.JButton openFileButton;
         private javax.swing.JLabel peer_id;
