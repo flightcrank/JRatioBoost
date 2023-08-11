@@ -118,7 +118,7 @@ public class About extends JDialog {
 		gbc.fill = GridBagConstraints.BOTH;
 		panel2.add(label3, gbc);
 		final JLabel label4 = new JLabel();
-		label4.setText("<html><b>Version: </b> 0.6</html>");
+		label4.setText("<html><b>Version: </b> 1.0</html>");
 		gbc = new GridBagConstraints();
 		gbc.gridx = 1;
 		gbc.gridy = 0;
