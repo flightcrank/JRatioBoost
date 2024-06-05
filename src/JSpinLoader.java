@@ -29,6 +29,8 @@ public class JSpinLoader extends JComponent {
 				repaint();
 			}
 		};
+
+		timer = new Timer(33, taskPerformer);
 	}
 	
 	public JSpinLoader(int width, int height, JButton jb) {
@@ -45,11 +47,11 @@ public class JSpinLoader extends JComponent {
 				jb.setIcon(new ImageIcon(createSpinnerImage(width, height, rot)));
 			}
 		};
+		
+		timer = new Timer(33, taskPerformer);
 	}
 	
 	public void start() {
-		
-		timer = new Timer(33, taskPerformer);
 		
 		if (!timer.isRunning()) {
 			
@@ -70,15 +72,15 @@ public class JSpinLoader extends JComponent {
 		this.size = num;
 	}
 
-	public void setSteps(int num) {
+	public void setSteps(int num) { 
 
 		this.numSteps = num;
 	}
 
 	public void setDirection(boolean direction) {
-		
+		            
 		clockwise = direction;
-	}
+	} 
 	
 	public void setSpeed(double num) {
 		
@@ -148,7 +150,7 @@ public class JSpinLoader extends JComponent {
 			g2d.fillOval((int) x - (size / 2) ,(int) y - (size / 2) , size, size);
 		}
 	}
-
+	
 	@Override
 	public void paintComponent(Graphics g) {
 		
