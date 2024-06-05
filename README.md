@@ -1,5 +1,9 @@
 
 # JRatio Boost
+
+Note(june 5 2024): this program is currently undergoing updates. best not to use the updates untill work has been
+finished
+
 This is a simple Java port of my C/gtk Ratio Boost program. It is used to spoof uploads to private torrent trackers.
 It will simply report to the torrent tracker that you are uploading, when you are really uploading nothing at all.
 This will give you a good "ratio" on any private tracker that you use. It will work on any major operating system as long as
