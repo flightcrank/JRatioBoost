@@ -16,12 +16,6 @@ that should compile all nessasry .java files. to run the program type the comman
 
 	$ java JRatioBoost
 
-Or you could simple run the already compiled program by downloding the provided .jar file
-and simply making it executable, and clicking on it in your favorite file browser, 
-or by issuing the following command in a console
-
-	$ java -jar jratioboost.jar
-
 ## Images 
 ![swing screenshot](https://i.imgur.com/8G9l9Ra.png)
 
