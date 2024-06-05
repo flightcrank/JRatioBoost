@@ -16,20 +16,47 @@ public class TorrentElement {
 	private Timer timer;		//object that represents a new thread to perform the upload
 	private TorrentInfo tInfo;	//object that contains all relevent torrent info
 	private TrackerConnect tConn;	//object that represents the spoofed upload info to send
-	private int uploadAmount;
-	private int downloadAmount;
+	private int uploadAmount;	//value to keep track of how much has been uploaded
+	private int downloadAmount;	//value to keep track of how much has been downloaded
+	private int uploadSpeed;	//vlaue to set the simulated speed of the upload
+	private int downloadSpeed;	//vlaue to set the simulated speed of the downloaded
 
 	public TorrentElement() {
 		
 		this.uploadAmount = 0;
 		this.downloadAmount = 0;
+		this.uploadSpeed = 40;
+		this.downloadSpeed = 10;
+	}
+
+	public int getUploadSpeed() {
+
+		return uploadSpeed;
+	}
+
+	public void setUploadSpeed(int uploadSpeed) {
+
+		this.uploadSpeed = uploadSpeed;
+	}
+
+	public int getDownloadSpeed() {
+		
+		return downloadSpeed;
+		
+	}
+
+	public void setDownloadSpeed(int downloadSpeed) {
+		
+		this.downloadSpeed = downloadSpeed;
 	}
 
 	public void setUploadAmount(int uploadAmount) {
+		
 		this.uploadAmount = uploadAmount;
 	}
 
 	public void setDownloadAmount(int downloadAmount) {
+
 		this.downloadAmount = downloadAmount;
 	}
 	
@@ -74,10 +101,12 @@ public class TorrentElement {
 	}
 
 	public int getUploadAmount() {
+
 		return uploadAmount;
 	}
 
 	public int getDownloadAmount() {
+
 		return downloadAmount;
 	}
 }

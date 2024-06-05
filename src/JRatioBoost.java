@@ -1,4 +1,5 @@
 
+import java.awt.Component;
 import java.awt.Cursor;
 
 import java.awt.event.ActionEvent;
@@ -388,6 +389,11 @@ public class JRatioBoost extends javax.swing.JFrame {
                 ConnectPanel.setLayout(new java.awt.GridBagLayout());
 
                 jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 9999, 1));
+                jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
+                        public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                                jspinnervaluechange(evt);
+                        }
+                });
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 2;
                 gridBagConstraints.gridy = 0;
@@ -661,33 +667,47 @@ public class JRatioBoost extends javax.swing.JFrame {
         }//GEN-LAST:event_jMenuItem1ActionPerformed
 
 	private void listSelected(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listSelected
-
-		indexSelected = torrentList.getSelectedIndex();
 		
-		TorrentElement te = torrentElement.get(indexSelected);
-		TorrentInfo tInfo = te.gettInfo();
-		updateLabels(te);
-
-		if (te.getTimer() == null) {
+		if (!torrentList.isSelectionEmpty()) {
 			
-			connectButton.setText("Connect");
-			jSpinLoader1.stop();
-
-			//clear labels if there is not a thread running to clear out any old data that may still be there
-			uploaded.setText("");
-			seeders.setText("");
-			leechers.setText("");
-			downloaded.setText("");
-			update.setText("");
-		
-		} else {
+			indexSelected = torrentList.getSelectedIndex();
 			
-			connectButton.setText("Stop");
-			jSpinLoader1.start();
+			TorrentElement te = torrentElement.get(indexSelected);
+			TorrentInfo tInfo = te.gettInfo();
+			updateLabels(te);
+			jSpinner1.setValue(te.getUploadSpeed());
+
+			if (te.getTimer() == null) {
+				
+				connectButton.setText("Connect");
+				jSpinLoader1.stop();
+
+				//clear labels if there is not a thread running to clear out any old data that may still be there
+				uploaded.setText("");
+				seeders.setText("");
+				leechers.setText("");
+				downloaded.setText("");
+				update.setText("");
+			
+			} else {
+				
+				connectButton.setText("Stop");
+				jSpinLoader1.start();
+			}
 		}
 		
 		System.out.println(String.format("selectedIndex: %d", indexSelected));
 	}//GEN-LAST:event_listSelected
+
+        private void jspinnervaluechange(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspinnervaluechange
+		
+		if (!torrentList.isSelectionEmpty()) {
+			
+			TorrentElement te = torrentElement.get(indexSelected);
+			te.setUploadSpeed((Integer) jSpinner1.getValue());
+			System.out.println("Spinner value changed: " + te.getUploadSpeed());
+		}
+        }//GEN-LAST:event_jspinnervaluechange
 
 	private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {
 
@@ -877,11 +897,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 		@Override
 		public void run() {
 			
-			int upSpeed = (Integer) jSpinner1.getValue();
+			int upSpeed = te.getUploadSpeed();
 			int n = te.getUploadAmount();
 			te.setUploadAmount(n += SizeConvert.KBToB(upSpeed));
-			
-			System.out.println(String.format("teIndex: %d, selIndex: %d", te.getIndex(), indexSelected));
 			
 			if (te.getIndex() == indexSelected) {
 				
