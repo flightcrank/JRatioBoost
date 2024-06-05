@@ -927,10 +927,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 				nextUpdate = Integer.parseInt(tc.interval);
 
                                 //the new http request has been made, start a new timer task
-                                if (timer != null) {
-
-                                        timer.scheduleAtFixedRate(new UpdateTask(te), 1000, 1000);
-                                }
+				te.setTimer(new Timer());
+				te.getTimer().scheduleAtFixedRate(new UpdateTask(te), 1000, 1000);
                         }
 
                         nextUpdate--;
