@@ -1,5 +1,4 @@
 
-import java.awt.Component;
 import java.awt.Cursor;
 
 import java.awt.event.ActionEvent;
@@ -23,6 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class JRatioBoost extends javax.swing.JFrame {
@@ -71,6 +72,14 @@ public class JRatioBoost extends javax.swing.JFrame {
                 torrentList = new javax.swing.JList<>();
                 DefaultListModel demoList = new DefaultListModel();
                 torrentList.setModel(demoList);
+
+                torrentList.addListSelectionListener(new ListSelectionListener() {
+                        @Override
+                        public void valueChanged(ListSelectionEvent e) {
+
+                                listListen(e);
+                        }
+                });
                 TorrentDataPanel = new javax.swing.JPanel();
                 InfoPanel = new javax.swing.JPanel();
                 jLabel1 = new javax.swing.JLabel();
@@ -168,11 +177,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent List", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
                 jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
-                torrentList.addMouseListener(new java.awt.event.MouseAdapter() {
-                        public void mouseClicked(java.awt.event.MouseEvent evt) {
-                                listSelected(evt);
-                        }
-                });
+                torrentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 jScrollPane1.setViewportView(torrentList);
 
                 jPanel1.add(jScrollPane1);
@@ -665,40 +670,43 @@ public class JRatioBoost extends javax.swing.JFrame {
 			c.setLocationRelativeTo(null);
 			c.setVisible(true);
         }//GEN-LAST:event_jMenuItem1ActionPerformed
+	
+	private void listListen(ListSelectionEvent e) {
 
-	private void listSelected(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_listSelected
-		
-		if (!torrentList.isSelectionEmpty()) {
-			
-			indexSelected = torrentList.getSelectedIndex();
-			
-			TorrentElement te = torrentElement.get(indexSelected);
-			TorrentInfo tInfo = te.gettInfo();
-			updateLabels(te);
-			jSpinner1.setValue(te.getUploadSpeed());
-
-			if (te.getTimer() == null) {
+		if (e.getValueIsAdjusting()) {
 				
-				connectButton.setText("Connect");
-				jSpinLoader1.stop();
-
-				//clear labels if there is not a thread running to clear out any old data that may still be there
-				uploaded.setText("");
-				seeders.setText("");
-				leechers.setText("");
-				downloaded.setText("");
-				update.setText("");
-			
-			} else {
+			if (!torrentList.isSelectionEmpty()) {
 				
-				connectButton.setText("Stop");
-				jSpinLoader1.start();
+				indexSelected = torrentList.getSelectedIndex();
+				
+				TorrentElement te = torrentElement.get(indexSelected);
+				TorrentInfo tInfo = te.gettInfo();
+				updateLabels(te);
+				jSpinner1.setValue(te.getUploadSpeed());
+
+				if (te.getTimer() == null) {
+					
+					connectButton.setText("Connect");
+					jSpinLoader1.stop();
+
+					//clear labels if there is not a thread running to clear out any old data that may still be there
+					uploaded.setText("");
+					seeders.setText("");
+					leechers.setText("");
+					downloaded.setText("");
+					update.setText("");
+				
+				} else {
+					
+					connectButton.setText("Stop");
+					jSpinLoader1.start();
+				}
 			}
+			
+			System.out.println(String.format("selectedIndex: %d", indexSelected));
 		}
-		
-		System.out.println(String.format("selectedIndex: %d", indexSelected));
-	}//GEN-LAST:event_listSelected
-
+	}
+	
         private void jspinnervaluechange(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspinnervaluechange
 		
 		if (!torrentList.isSelectionEmpty()) {
