@@ -319,8 +319,13 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 date.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 date.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-                date.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-                InfoPanel.add(date, new java.awt.GridBagConstraints());
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 1;
+                gridBagConstraints.gridy = 4;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
+                InfoPanel.add(date, gridBagConstraints);
 
                 TorrentDataPanel.add(InfoPanel);
 
