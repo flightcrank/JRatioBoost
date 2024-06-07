@@ -38,6 +38,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		initComponents();
 		this.port = "6881";
 		torrentElement = new ArrayList<>();
+		jProgressBar1.setVisible(false);
 	}
 
         // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -429,12 +430,12 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(update, gridBagConstraints);
 
+                jProgressBar1.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jProgressBar1.setString("");
                 jProgressBar1.setStringPainted(true);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 3;
                 gridBagConstraints.gridy = 4;
-                gridBagConstraints.gridwidth = 2;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
                 gridBagConstraints.weightx = 1000.0;
@@ -578,7 +579,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 		}
 
 		//update the tracker connection labels
-		
 	}
 
 	private void stopAction() {
@@ -707,6 +707,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		leechers.setText("");
 		downloaded.setText("");
 		update.setText("");
+		jProgressBar1.setVisible(false);
 		
 		if (res == JFileChooser.APPROVE_OPTION) {
 
@@ -785,6 +786,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				TorrentInfo tInfo = te.gettInfo();
 				updateLabels(te);
 				jSpinner1.setValue(te.getUploadSpeed());
+				jProgressBar1.setVisible(false);
 
 				if (te.getTimer() == null) {
 					
@@ -797,6 +799,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 					leechers.setText("");
 					downloaded.setText("");
 					update.setText("");
+					jProgressBar1.setValue(0);
+					jProgressBar1.setString(null);
 				
 				} else {
 					
@@ -1008,6 +1012,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				update.setText(tc.interval);
 				downloaded.setText("100%");
 				uploaded.setText(new SizeConvert(te.getUploadAmount()).toString());
+				jProgressBar1.setVisible(true);
 			}
 
 			if (te.getTimeLeft() <= 0) {
@@ -1052,10 +1057,15 @@ public class JRatioBoost extends javax.swing.JFrame {
 			//percentage of time left untill the next update is preformed
 			float pc = (float) num / total;
 			
-			int max = jProgressBar1.getMaximum();
-			float v = pc * max;
-			jProgressBar1.setValue((int) v);
-			jProgressBar1.setString(String.format("%d/%d", num, total));
+			//only update the progress bar for the currently selected torrent, otherwise all running torrents
+			//would be updateing the same progress bar at the same time
+			if (te.getIndex() == indexSelected) {
+				
+				int max = jProgressBar1.getMaximum();
+				float v = pc * max;
+				jProgressBar1.setValue((int) v);
+				jProgressBar1.setString(String.format("%d/%d", num, total));
+			}
 			
 			//update the variable that determins how much time is left for the selected torrent untill it updates
 			te.setTimeLeft(te.getTimeLeft() - 1);
