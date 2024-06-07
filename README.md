@@ -20,6 +20,8 @@ that should compile all nessasry .java files. to run the program type the comman
 If you just want to run the program, then go to "Releases" and download the latest version that it ready for use
 and follow the instructions on how to run the program
 
+[Releases Page](https://github.com/flightcrank/JRatioBoost/releases)
+
 ## Images 
 ![swing screenshot](https://i.imgur.com/8G9l9Ra.png)
 
