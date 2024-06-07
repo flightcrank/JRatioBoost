@@ -18,8 +18,9 @@ public class TorrentElement {
 	private TrackerConnect tConn;	//object that represents the spoofed upload info to send
 	private int uploadAmount;	//value to keep track of how much has been uploaded
 	private int downloadAmount;	//value to keep track of how much has been downloaded
-	private int uploadSpeed;	//vlaue to set the simulated speed of the upload
-	private int downloadSpeed;	//vlaue to set the simulated speed of the downloaded
+	private int uploadSpeed;	//value to set the simulated speed of the upload
+	private int downloadSpeed;	//value to set the simulated speed of the downloaded
+	private int timeLeft;		//value to keep track of the number of seconds left to send the upload/download data
 
 	public TorrentElement() {
 		
@@ -27,6 +28,17 @@ public class TorrentElement {
 		this.downloadAmount = 0;
 		this.uploadSpeed = 40;
 		this.downloadSpeed = 10;
+		this.timeLeft = 0;
+	}
+	
+	public int getTimeLeft() {
+		
+		return timeLeft;
+	}
+
+	public void setTimeLeft(int timeLeft) {
+
+		this.timeLeft = timeLeft;
 	}
 
 	public int getUploadSpeed() {
@@ -42,7 +54,6 @@ public class TorrentElement {
 	public int getDownloadSpeed() {
 		
 		return downloadSpeed;
-		
 	}
 
 	public void setDownloadSpeed(int downloadSpeed) {

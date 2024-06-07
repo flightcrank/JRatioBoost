@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
@@ -103,6 +104,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 downloaded = new javax.swing.JLabel();
                 uploaded = new javax.swing.JLabel();
                 update = new javax.swing.JLabel();
+                jProgressBar1 = new javax.swing.JProgressBar();
                 ConnectPanel = new javax.swing.JPanel();
                 jSpinner1 = new javax.swing.JSpinner();
                 connectButton = new javax.swing.JButton();
@@ -115,12 +117,17 @@ public class JRatioBoost extends javax.swing.JFrame {
                 torrent_name = new javax.swing.JLabel();
                 openFileButton = new javax.swing.JButton();
 
+                jPopupMenu1.setFont(new java.awt.Font("Noto Sans Regular", 0, 17)); // NOI18N
+
                 changeTracker.setText("Tracker");
                 changeTracker.setEnabled(false);
+                changeTracker.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
 
                 changeClient.setText("Client");
                 changeClient.setEnabled(false);
+                changeClient.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
 
+                jMenuItem1.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem1.setText("Update Port");
                 jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -128,6 +135,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                         }
                 });
 
+                jMenuItem3.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem3.setText("Update Interval");
                 jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -135,6 +143,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                         }
                 });
 
+                jMenuItem4.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem4.setText("About");
                 jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +151,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                         }
                 });
 
+                jMenuItem5.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem5.setText("KTorrent 5.11");
                 jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +159,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                         }
                 });
 
+                jMenuItem6.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem6.setText("Transmission 2.94");
                 jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,6 +167,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                         }
                 });
 
+                jMenuItem7.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 jMenuItem7.setText("Custom Client");
                 jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -165,18 +177,27 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
                 setTitle("JRatioBoost");
-                setPreferredSize(new java.awt.Dimension(600, 420));
+                setPreferredSize(new java.awt.Dimension(640, 480));
 
                 WindowPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+                WindowPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+                        public void mousePressed(java.awt.event.MouseEvent evt) {
+                                windowFocus(evt);
+                        }
+                });
                 WindowPanel.setLayout(new java.awt.BorderLayout());
 
+                listPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 0, 0, 0));
                 listPanel.setOpaque(false);
                 listPanel.setPreferredSize(new java.awt.Dimension(250, 159));
                 listPanel.setLayout(new javax.swing.BoxLayout(listPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-                jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent List", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+                jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent List", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Noto Sans", 0, 17))); // NOI18N
                 jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.LINE_AXIS));
 
+                jScrollPane1.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+                torrentList.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
                 torrentList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
                 jScrollPane1.setViewportView(torrentList);
 
@@ -186,12 +207,15 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 WindowPanel.add(listPanel, java.awt.BorderLayout.WEST);
 
+                TorrentDataPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 0, 0));
+                TorrentDataPanel.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                TorrentDataPanel.setInheritsPopupMenu(true);
                 TorrentDataPanel.setLayout(new javax.swing.BoxLayout(TorrentDataPanel, javax.swing.BoxLayout.Y_AXIS));
 
-                InfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent Info", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+                InfoPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Torrent Info", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Noto Sans", 0, 17))); // NOI18N
                 InfoPanel.setLayout(new java.awt.GridBagLayout());
 
-                jLabel1.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel1.setText("Tracker:");
                 jLabel1.setAlignmentX(0.5F);
@@ -203,7 +227,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 InfoPanel.add(jLabel1, gridBagConstraints);
 
-                jLabel3.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel3.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel3.setText("Info_Hash:");
                 jLabel3.setAlignmentX(0.5F);
@@ -215,7 +239,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 InfoPanel.add(jLabel3, gridBagConstraints);
 
-                jLabel4.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel4.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel4.setText("Peer_ID:");
                 jLabel4.setAlignmentX(0.5F);
@@ -227,7 +251,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 InfoPanel.add(jLabel4, gridBagConstraints);
 
-                jLabel8.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel8.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel8.setText("Size:");
                 jLabel8.setAlignmentX(0.5F);
@@ -239,7 +263,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 InfoPanel.add(jLabel8, gridBagConstraints);
 
-                jLabel9.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel9.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel9.setText("Date:");
                 jLabel9.setVerticalAlignment(javax.swing.SwingConstants.TOP);
@@ -253,6 +277,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 InfoPanel.add(jLabel9, gridBagConstraints);
 
+                tracker.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 tracker.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
@@ -262,6 +287,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 InfoPanel.add(tracker, gridBagConstraints);
 
+                info_hash.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 info_hash.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
@@ -271,6 +297,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 InfoPanel.add(info_hash, gridBagConstraints);
 
+                peer_id.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 peer_id.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
@@ -280,6 +307,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 InfoPanel.add(peer_id, gridBagConstraints);
 
+                size.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 size.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
@@ -289,86 +317,93 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 InfoPanel.add(size, gridBagConstraints);
 
+                date.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 date.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 date.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-                gridBagConstraints = new java.awt.GridBagConstraints();
-                gridBagConstraints.gridx = 1;
-                gridBagConstraints.gridy = 4;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.weighty = 1.0;
-                gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
-                InfoPanel.add(date, gridBagConstraints);
+                InfoPanel.add(date, new java.awt.GridBagConstraints());
 
                 TorrentDataPanel.add(InfoPanel);
 
-                OutputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Tracker Output", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP));
+                OutputPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Tracker Output", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Noto Sans", 0, 17))); // NOI18N
                 OutputPanel.setLayout(new java.awt.GridBagLayout());
 
-                jLabel2.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel2.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel2.setText("Seeders:");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel2, gridBagConstraints);
 
-                jLabel15.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel15.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel15.setText("Leechers:");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel15, gridBagConstraints);
 
-                jLabel16.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel16.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel16.setText("Downloaded:");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 2;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel16, gridBagConstraints);
 
-                jLabel17.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel17.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel17.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel17.setText("Uploaded:");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 3;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel17, gridBagConstraints);
 
-                jLabel18.setFont(new java.awt.Font("DejaVu Sans", 1, 12)); // NOI18N
+                jLabel18.setFont(new java.awt.Font("Noto Sans", 1, 14)); // NOI18N
                 jLabel18.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
                 jLabel18.setText("Update Interval:");
                 jLabel18.setVerticalAlignment(javax.swing.SwingConstants.TOP);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 4;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.weighty = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel18, gridBagConstraints);
+
+                seeders.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(seeders, gridBagConstraints);
+
+                leechers.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(leechers, gridBagConstraints);
+
+                downloaded.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(downloaded, gridBagConstraints);
+
+                uploaded.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
@@ -376,14 +411,30 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(uploaded, gridBagConstraints);
 
+                update.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 update.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+                update.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.gridy = 4;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
                 gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.weighty = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 5);
                 OutputPanel.add(update, gridBagConstraints);
+
+                jProgressBar1.setString("");
+                jProgressBar1.setStringPainted(true);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 3;
+                gridBagConstraints.gridy = 4;
+                gridBagConstraints.gridwidth = 2;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+                gridBagConstraints.weightx = 1000.0;
+                gridBagConstraints.weighty = 1.0;
+                OutputPanel.add(jProgressBar1, gridBagConstraints);
 
                 TorrentDataPanel.add(OutputPanel);
 
@@ -393,10 +444,11 @@ public class JRatioBoost extends javax.swing.JFrame {
                 ConnectPanel.setPreferredSize(new java.awt.Dimension(315, 50));
                 ConnectPanel.setLayout(new java.awt.GridBagLayout());
 
+                jSpinner1.setFont(new java.awt.Font("Noto Sans Regular", 0, 17)); // NOI18N
                 jSpinner1.setModel(new javax.swing.SpinnerNumberModel(40, 0, 9999, 1));
                 jSpinner1.addChangeListener(new javax.swing.event.ChangeListener() {
                         public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                                jspinnervaluechange(evt);
+                                jSpinnerStateChanged(evt);
                         }
                 });
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -406,6 +458,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.weightx = 0.5;
                 ConnectPanel.add(jSpinner1, gridBagConstraints);
 
+                connectButton.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 connectButton.setText("Connect");
                 connectButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 connectButton.setIconTextGap(10);
@@ -445,8 +498,11 @@ public class JRatioBoost extends javax.swing.JFrame {
                 WindowPanel.add(ConnectPanel, java.awt.BorderLayout.SOUTH);
 
                 openPanel.setLayout(new java.awt.BorderLayout());
+
+                torrent_name.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
                 openPanel.add(torrent_name, java.awt.BorderLayout.CENTER);
 
+                openFileButton.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 openFileButton.setText("Open Torrent");
                 openFileButton.setPreferredSize(new java.awt.Dimension(250, 40));
                 openFileButton.addActionListener(new java.awt.event.ActionListener() {
@@ -603,6 +659,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 					JMenuItem item = changeTracker.add(val);
 					item.addActionListener(new ChangeTrackerAction());
+                			item.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
 				}
 			}
 
@@ -633,6 +690,19 @@ public class JRatioBoost extends javax.swing.JFrame {
 		changeTracker.setEnabled(false);
 		changeClient.setEnabled(true);
 
+		//if a new torrent file is open make sure the the spinloader isnt active for a previouse torrent
+		//that may be running. Also make sure the button is in its connect state. as a previouse torrent that 
+		//is running with change it to its stopped state
+		jSpinLoader1.stop();
+		connectButton.setText("Connect");	
+		
+		//also clear labels if there is not a thread running to clear out any old data that may still be there
+		uploaded.setText("");
+		seeders.setText("");
+		leechers.setText("");
+		downloaded.setText("");
+		update.setText("");
+		
 		if (res == JFileChooser.APPROVE_OPTION) {
 
 			openTorrentFile(jfc.getSelectedFile().getAbsolutePath());
@@ -670,6 +740,33 @@ public class JRatioBoost extends javax.swing.JFrame {
 			c.setLocationRelativeTo(null);
 			c.setVisible(true);
         }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+        private void jSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinnerStateChanged
+
+		//If there a items in the list
+		if (!torrentList.isSelectionEmpty()) {
+			
+			TorrentElement te = torrentElement.get(indexSelected);
+			te.setUploadSpeed((Integer) jSpinner1.getValue());
+			//System.out.println(te.getUploadSpeed());
+		} 
+        }//GEN-LAST:event_jSpinnerStateChanged
+	
+	//This function commits the value in the JSpinner when ever the user clicks
+	//outside anywhere in the window. So you dont have to press enter when manually
+	//entering a number in the JSpinner
+        private void windowFocus(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_windowFocus
+		
+		try {
+	
+			jSpinner1.commitEdit();
+			
+		} catch (ParseException ex) {
+			
+			System.out.println(ex);
+			// Do nothing
+		}
+        }//GEN-LAST:event_windowFocus
 	
 	private void listListen(ListSelectionEvent e) {
 
@@ -707,16 +804,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 		}
 	}
 	
-        private void jspinnervaluechange(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jspinnervaluechange
-		
-		if (!torrentList.isSelectionEmpty()) {
-			
-			TorrentElement te = torrentElement.get(indexSelected);
-			te.setUploadSpeed((Integer) jSpinner1.getValue());
-			System.out.println("Spinner value changed: " + te.getUploadSpeed());
-		}
-        }//GEN-LAST:event_jspinnervaluechange
-
 	private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {
 
 		About a = new About();
@@ -892,14 +979,13 @@ public class JRatioBoost extends javax.swing.JFrame {
 		private TrackerConnect tc;
 		private TorrentInfo tInfo;
 		private Timer timer;
-		private int nextUpdate;
 		
 		public UpdateTask(TorrentElement te) {
 			
 			this.te = te;
 			this.tc = te.gettConn();
 			this.timer = te.getTimer();
-			nextUpdate = Integer.parseInt(tc.interval);
+			te.setTimeLeft(Integer.parseInt(tc.interval));
 		}
 		
 		@Override
@@ -919,7 +1005,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				uploaded.setText(new SizeConvert(te.getUploadAmount()).toString());
 			}
 
-			if (nextUpdate <= 0) {
+			if (te.getTimeLeft() <= 0) {
 
 				//stop the timer thread from executing to prevent the timer task
 				//from continuing to execute while the http request is being made
@@ -950,15 +1036,25 @@ public class JRatioBoost extends javax.swing.JFrame {
 					stopAction();
 				}
 
-				nextUpdate = Integer.parseInt(tc.interval);
-
                                 //the new http request has been made, start a new timer task
 				te.setTimer(new Timer());
 				te.getTimer().scheduleAtFixedRate(new UpdateTask(te), 1000, 1000);
                         }
-
-                        nextUpdate--;
-                        tc.interval = String.format("%d", nextUpdate);
+			
+			int total = Integer.parseInt(tc.interval);
+			int num = total - te.getTimeLeft();
+			
+			//percentage of time left untill the next update is preformed
+			float pc = (float) num / total;
+			
+			int max = jProgressBar1.getMaximum();
+			float v = pc * max;
+			jProgressBar1.setValue((int) v);
+			jProgressBar1.setString(String.format("%d/%d", num, total));
+			
+			//update the variable that determins how much time is left for the selected torrent untill it updates
+			te.setTimeLeft(te.getTimeLeft() - 1);
+			//update the variable that the GUI  uses to display how much time untill the next update
                 }
         }
 
@@ -994,6 +1090,7 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JMenuItem jMenuItem7;
         private javax.swing.JPanel jPanel1;
         private javax.swing.JPopupMenu jPopupMenu1;
+        private javax.swing.JProgressBar jProgressBar1;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JSeparator jSeparator1;
         private JSpinLoader jSpinLoader1;
