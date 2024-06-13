@@ -973,14 +973,14 @@ public class JRatioBoost extends javax.swing.JFrame {
 		}
 	}
 
-	private void stopAction() {
+	private void stopAction(int tIndex) {
 
 		openFileButton.setEnabled(true);
 		connectButton.setText("Connect");
 		updatePortMenu.setEnabled(true);
 		jSpinLoader1.stop();
 		
-		TorrentElement te = torrentElement.get(indexSelected);
+		TorrentElement te = torrentElement.get(tIndex);
 		Timer timer = te.getTimer();
 
 		if (timer != null) {
@@ -1118,7 +1118,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			//stop button was pressed
 		} else {
 
-			stopAction();
+			stopAction(indexSelected);
 		}
 	}
 
@@ -1528,17 +1528,17 @@ public class JRatioBoost extends javax.swing.JFrame {
 			} catch (MalformedURLException ex) {
 
 				JOptionPane.showMessageDialog(WindowPanel, "Error: Malformed URL. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction();
+				stopAction(te.getIndex());
 
 			} catch (IOException ex) {
 
 				JOptionPane.showMessageDialog(WindowPanel, "Error: IO error. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction();
+				stopAction(te.getIndex());
 
 			} catch (Exception ex) {
 
 				JOptionPane.showMessageDialog(WindowPanel, "Error: " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction();
+				stopAction(te.getIndex());
 			}
 
 			return null;
@@ -1628,28 +1628,25 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 					te.getErrorMsg().add("Error: IO Exception");
 					te.getErrorMsg().add(ex.getMessage());
-					ex.printStackTrace();
 					int numError = te.getErrorMsg().size() / 2;	//there are 2 messages per error so divide by 2 to find the number of errors
 					errorsButton.setText("" + numError);
-					stopAction();
+					stopAction(te.getIndex());
 
 				} catch (IOException ex) {
 
 					te.getErrorMsg().add("Error: IO Exception.");
 					te.getErrorMsg().add(ex.getMessage());
-					ex.printStackTrace();
 					int numError = te.getErrorMsg().size() / 2;	//there are 2 messages per error so divide by 2 to find the number of errors
 					errorsButton.setText("" + numError);
-					stopAction();
+					stopAction(te.getIndex());
 
 				} catch (Exception ex) {
 
 					te.getErrorMsg().add("Error: Tracker failure response.");
 					te.getErrorMsg().add(ex.getMessage());
-					ex.printStackTrace();
 					int numError = te.getErrorMsg().size() / 2;	//there are 2 messages per error so divide by 2 to find the number of errors
 					errorsButton.setText("" + numError);
-					stopAction();
+					stopAction(te.getIndex());
 				}
 
                         }
@@ -1685,26 +1682,26 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 			TorrentElement te = torrentElement.get(index);
 			
-			//if no torrents are actively running
+			//if torrents are running
 			if (te.getTimer() != null) {
+				
+				//display green icon
+				label.setIcon(new ImageIcon(getClass().getResource("icons/status.png")));
+			
+			//torrents are not running
+			} else {
 				
 				//if the torrent has no errors
 				if (te.getErrorMsg().isEmpty()) {
 					
 					//display transparent icon
-					label.setIcon(new ImageIcon(getClass().getResource("icons/status.png")));
+					label.setIcon(new ImageIcon(getClass().getResource("icons/status-offline.png")));
 				
 				} else {
 					
 					//display red icon
 					label.setIcon(new ImageIcon(getClass().getResource("icons/status-busy.png")));
 				}
-			
-			//torrent is activly running
-			} else {
-				
-				//display green icon
-				label.setIcon(new ImageIcon(getClass().getResource("icons/status-offline.png")));
 			}
 			
 			return label;
