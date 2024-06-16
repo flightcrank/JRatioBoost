@@ -1378,11 +1378,10 @@ public class JRatioBoost extends javax.swing.JFrame {
 					update.setText("");
 					jProgressBar1.setValue(0);
 					jProgressBar1.setString(null);
-					uploadsSentButton.setText("0");
-					announceButton.setText("0");
-					errorsButton.setText("0");
+					//uploadsSentButton.setText("0");
+					//announceButton.setText("0");
+					//errorsButton.setText("0");
 			
-					
 				} else {
 					
 					connectButton.setText("Stop");
