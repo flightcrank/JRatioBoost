@@ -225,7 +225,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 });
 
                 transmissionMenuItem.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
-                transmissionMenuItem.setText("Transmission 2.94");
+                transmissionMenuItem.setText("Transmission 4.06");
                 transmissionMenuItem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 transmissionMenuItemActionPerformed(evt);
@@ -418,7 +418,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
+                msgDialog.setPreferredSize(new java.awt.Dimension(500, 400));
 
                 jPanel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel14.setLayout(new java.awt.BorderLayout());
@@ -1266,7 +1266,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		
 		String s = errorsButton.getText();
 		
-		if (s != "0") {
+		if (!s.equals("0")) {
 			
 			TorrentElement te = torrentElement.get(indexSelected);
 			String line = "";
@@ -1289,7 +1289,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		} else {
 
 			//there are no errors
-			msgEditorPane.setText("<center><br /><font size =\"5\">There have been no errors !</center></font>");
+			msgEditorPane.setText("<center><br /><font size =\"5\">There have been no errors !</center></font><br />");
 		}
 		
 		msgLabel.setText("<html><h1>Error Messages</h2></html>");
@@ -1352,7 +1352,7 @@ public class JRatioBoost extends javax.swing.JFrame {
         }//GEN-LAST:event_announceButtonActionPerformed
 	
 	private void listListen(ListSelectionEvent e) {
-
+		
 		if (e.getValueIsAdjusting()) {
 				
 			if (!torrentList.isSelectionEmpty()) {
@@ -1364,6 +1364,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 				updateLabels(te);
 				uploadSpeedSpinner.setValue(te.getUploadSpeed());
 				jProgressBar1.setVisible(false);
+				uploadsSentButton.setText(new SizeConvert(te.getUploadSent()).toString());
+				announceButton.setText(String.format("%d", te.getNumAnnouce().size()));
+				errorsButton.setText(String.format("%d", te.getErrorMsg().size() / 2));
 
 				if (te.getTimer() == null) {
 					
@@ -1378,9 +1381,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 					update.setText("");
 					jProgressBar1.setValue(0);
 					jProgressBar1.setString(null);
-					//uploadsSentButton.setText("0");
-					//announceButton.setText("0");
-					//errorsButton.setText("0");
 			
 				} else {
 					
@@ -1412,10 +1412,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 		updateIntervalDialog.pack();
 		updateIntervalDialog.setLocationRelativeTo(null);
 		updateIntervalDialog.setVisible(true);
-		//UpdateAmount ua = new UpdateAmount(tc);
-		//ua.pack();
-		//ua.setLocationRelativeTo(null);
-		//ua.setVisible(true);
 	}
 
 	private void kTorrentMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1432,7 +1428,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		int n = torrentList.getSelectedIndex();
 		TorrentInfo tInfo = torrentElement.get(indexSelected).gettInfo();
 		
-		tInfo.computePeerId("TR2940");
+		tInfo.computePeerId("TR4060");
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
 	}
 
