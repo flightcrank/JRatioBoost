@@ -104,7 +104,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel11 = new javax.swing.JPanel();
                 changeClientOkButton = new javax.swing.JButton();
                 changeClientCancelButton = new javax.swing.JButton();
-                msgDialog = new javax.swing.JDialog();
+                msgDialog = new javax.swing.JDialog(this);
                 jPanel14 = new javax.swing.JPanel();
                 msgLabel = new javax.swing.JLabel();
                 jScrollPane2 = new javax.swing.JScrollPane();
@@ -244,7 +244,6 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jFileChooser1.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
                 jFileChooser1.setPreferredSize(new java.awt.Dimension(700, 500));
 
-                updateIntervalDialog.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
                 updateIntervalDialog.setTitle("Change Update Interval");
                 updateIntervalDialog.setIconImage(this.img.getImage());
 
@@ -299,6 +298,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel8.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
+                jPanel8.setPreferredSize(new java.awt.Dimension(350, 200));
                 jPanel8.setLayout(new java.awt.BorderLayout());
 
                 jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Change Port", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Noto Sans", 1, 17))); // NOI18N
@@ -418,7 +418,12 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(500, 400));
+                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
+                msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
+                        public void componentShown(java.awt.event.ComponentEvent evt) {
+                                msgDialogComponentShown(evt);
+                        }
+                });
 
                 jPanel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel14.setLayout(new java.awt.BorderLayout());
@@ -1158,7 +1163,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
         private void changeUpdateCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUpdateCancelButtonActionPerformed
 		
-		updateIntervalDialog.dispose();
+		updateIntervalDialog.setVisible(false);
         }//GEN-LAST:event_changeUpdateCancelButtonActionPerformed
 
         private void changeUpdateOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUpdateOkButtonActionPerformed
@@ -1166,7 +1171,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		TorrentElement te = torrentElement.get(indexSelected);
 		int sVal = (Integer) changeUpdateSpinner.getValue();
 		te.setTimeLeft(sVal);
-		updateIntervalDialog.dispose();
+		updateIntervalDialog.setVisible(false);
         }//GEN-LAST:event_changeUpdateOkButtonActionPerformed
 
         private void jPopupMenu1PopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jPopupMenu1PopupMenuWillBecomeVisible
@@ -1199,7 +1204,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
         private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
                 
-		changePortDialog.dispose();
+		changePortDialog.setVisible(false);
         }//GEN-LAST:event_jButton2ActionPerformed
 
         private void changePortOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changePortOkButtonActionPerformed
@@ -1208,12 +1213,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 		
 		int i = (Integer) changePortSpinner.getValue();
 		te.setPort(String.format("%d", i));
-		changePortDialog.dispose();
+		changePortDialog.setVisible(false);
         }//GEN-LAST:event_changePortOkButtonActionPerformed
 
         private void changeClientCancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeClientCancelButtonActionPerformed
 		
-		customClientDialog.dispose();
+		customClientDialog.setVisible(false);
         }//GEN-LAST:event_changeClientCancelButtonActionPerformed
 
         private void changeClientOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeClientOkButtonActionPerformed
@@ -1254,12 +1259,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 		String codeVersion = String.format("%s%d", clientCode, version);
 		te.gettInfo().computePeerId(codeVersion);
 		peer_id.setText(te.gettInfo().hexString(te.gettInfo().peerId));
-		customClientDialog.dispose();
+		customClientDialog.setVisible(false);
         }//GEN-LAST:event_changeClientOkButtonActionPerformed
 
         private void msgOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_msgOkButtonActionPerformed
 		
-		msgDialog.dispose();
+		msgDialog.setVisible(false);
         }//GEN-LAST:event_msgOkButtonActionPerformed
 
         private void errorsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_errorsButtonActionPerformed
@@ -1297,6 +1302,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		msgDialog.setTitle("Error Messages");
 		msgDialog.pack();
 		msgDialog.setLocationRelativeTo(null);
+		msgDialog.getRootPane().repaint();
 		msgDialog.setVisible(true);
         }//GEN-LAST:event_errorsButtonActionPerformed
 
@@ -1319,6 +1325,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		msgDialog.setTitle("Upload Amount");
 		msgDialog.pack();
 		msgDialog.setLocationRelativeTo(null);
+		msgDialog.getRootPane().repaint();
 		msgDialog.setVisible(true);
         }//GEN-LAST:event_uploadsSentButtonActionPerformed
 
@@ -1348,8 +1355,15 @@ public class JRatioBoost extends javax.swing.JFrame {
 		msgDialog.setTitle("Announcements");
 		msgDialog.pack();
 		msgDialog.setLocationRelativeTo(null);
+		msgDialog.getRootPane().repaint();
 		msgDialog.setVisible(true);
         }//GEN-LAST:event_announceButtonActionPerformed
+
+	//this is needed to render properly with java 8
+        private void msgDialogComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_msgDialogComponentShown
+		
+		msgDialog.repaint();
+        }//GEN-LAST:event_msgDialogComponentShown
 	
 	private void listListen(ListSelectionEvent e) {
 		
