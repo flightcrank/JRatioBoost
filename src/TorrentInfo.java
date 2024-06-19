@@ -34,7 +34,7 @@ class TorrentInfo {
 			
 			setInfo(lexTree.tokenList);
 			computeInfoHash(lexTree.tokenList, file);
-			computePeerId("KT5110");
+			computePeerId("TR4050");
 
 		} else {
 			
