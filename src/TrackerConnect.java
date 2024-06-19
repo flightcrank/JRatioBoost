@@ -65,11 +65,8 @@ class TrackerConnect {
 		if (this.customUserAgent != null) {
 			
 			userAgent = this.customUserAgent;
-			System.out.println("using custom UA " + userAgent);
-		} else {
+		} 
 
-			System.out.println("NOT using custom UA " + userAgent);
-		}
 		
 		//connect to torrent tracker
 		tracker = new URL(request);
