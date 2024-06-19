@@ -102,6 +102,8 @@ public class JRatioBoost extends javax.swing.JFrame {
                 clientComboBox = new javax.swing.JComboBox<>();
                 jLabel13 = new javax.swing.JLabel();
                 changeClientVersionSpinner = new javax.swing.JSpinner();
+                customUserAgentTextField = new javax.swing.JTextField();
+                customUserAgentCheckBox = new javax.swing.JCheckBox();
                 jPanel11 = new javax.swing.JPanel();
                 changeClientOkButton = new javax.swing.JButton();
                 changeClientCancelButton = new javax.swing.JButton();
@@ -112,6 +114,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 msgEditorPane = new javax.swing.JEditorPane();
                 jPanel15 = new javax.swing.JPanel();
                 msgOkButton = new javax.swing.JButton();
+                buttonGroup1 = new javax.swing.ButtonGroup();
                 WindowPanel = new javax.swing.JPanel();
                 WindowPanel.setComponentPopupMenu(jPopupMenu1);
                 listPanel = new javax.swing.JPanel();
@@ -226,7 +229,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 });
 
                 transmissionMenuItem.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
-                transmissionMenuItem.setText("Transmission 4.06");
+                transmissionMenuItem.setText("Transmission 4.05");
                 transmissionMenuItem.addActionListener(new java.awt.event.ActionListener() {
                         public void actionPerformed(java.awt.event.ActionEvent evt) {
                                 transmissionMenuItemActionPerformed(evt);
@@ -345,9 +348,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 customClientDialog.setTitle("Custom Client");
                 customClientDialog.setIconImage(this.img.getImage());
+                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 350));
 
                 jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-                jPanel13.setPreferredSize(new java.awt.Dimension(350, 250));
                 jPanel13.setLayout(new java.awt.BorderLayout());
 
                 jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createEtchedBorder(), "Change Client", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.TOP, new java.awt.Font("Noto Sans", 1, 16))); // NOI18N
@@ -368,7 +371,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
+                gridBagConstraints.insets = new java.awt.Insets(10, 10, 10, 0);
                 jPanel12.add(clientComboBox, gridBagConstraints);
 
                 jLabel13.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
@@ -386,8 +389,34 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.gridy = 1;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
+                gridBagConstraints.insets = new java.awt.Insets(0, 10, 10, 0);
                 jPanel12.add(changeClientVersionSpinner, gridBagConstraints);
+
+                customUserAgentTextField.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
+                customUserAgentTextField.setText("(Auto)");
+                customUserAgentTextField.setEnabled(false);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 3;
+                gridBagConstraints.gridwidth = 2;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+                jPanel12.add(customUserAgentTextField, gridBagConstraints);
+
+                customUserAgentCheckBox.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
+                customUserAgentCheckBox.setText("Use Custom User Agent");
+                customUserAgentCheckBox.setToolTipText("Enter in your own Custom User Agent or leave unchecked to have one auto generated based off the version number entered");
+                customUserAgentCheckBox.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                customUserAgentCheckBoxActionPerformed(evt);
+                        }
+                });
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 2;
+                gridBagConstraints.gridwidth = 2;
+                gridBagConstraints.insets = new java.awt.Insets(0, 0, 10, 0);
+                jPanel12.add(customUserAgentCheckBox, gridBagConstraints);
 
                 jPanel13.add(jPanel12, java.awt.BorderLayout.CENTER);
 
@@ -419,7 +448,6 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
                 msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
                         public void componentShown(java.awt.event.ComponentEvent evt) {
                                 msgDialogComponentShown(evt);
@@ -916,7 +944,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 	 * is to small
 	 * @param comp the swing component to change the font size of
 	 */
-	public void setFileChooserFont(Component[] comp) {
+	private void setFileChooserFont(Component[] comp) {
 	
 		Font font = new Font("SansSerif",Font.PLAIN, 16);
 		
@@ -1341,7 +1369,17 @@ public class JRatioBoost extends javax.swing.JFrame {
 				
 				clientCode = "KT";
 		}
-
+		
+		if (customUserAgentCheckBox.isSelected()) {
+			
+			String s = customUserAgentTextField.getText();
+			te.setCustomUserAgent(s);
+		
+		} else {
+	
+			te.setCustomUserAgent(null);
+		}
+		
 		String codeVersion = String.format("%s%d", clientCode, version);
 		te.gettInfo().computePeerId(codeVersion);
 		peer_id.setText(te.gettInfo().hexString(te.gettInfo().peerId));
@@ -1475,6 +1513,20 @@ public class JRatioBoost extends javax.swing.JFrame {
 		msgDialog.repaint();
         }//GEN-LAST:event_msgDialogComponentShown
 
+        private void customUserAgentCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customUserAgentCheckBoxActionPerformed
+		
+		if (customUserAgentCheckBox.isSelected()) {
+			
+			customUserAgentTextField.setEnabled(true);
+			customUserAgentTextField.setText("");
+		
+		} else {
+			
+			customUserAgentTextField.setEnabled(false);
+			customUserAgentTextField.setText("(Auto)");
+		} 
+        }//GEN-LAST:event_customUserAgentCheckBoxActionPerformed
+
 	/**
 	 * This function is triggered whenever the user makes a new selection on the JList. It sets the
 	 * member variable indexSelected to the appropriate integer index location. This allows the program 
@@ -1581,7 +1633,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		int n = torrentList.getSelectedIndex();
 		TorrentInfo tInfo = torrentElement.get(indexSelected).gettInfo();
 		
-		tInfo.computePeerId("TR4060");
+		tInfo.computePeerId("TR4050");
 		peer_id.setText(tInfo.hexString(tInfo.peerId));
 	}
 
@@ -1591,10 +1643,26 @@ public class JRatioBoost extends javax.swing.JFrame {
 	 * @param evt 
 	 */
 	private void customClientMenuActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		TorrentElement te = torrentElement.get(indexSelected);
+
+		if (te.getCustomUserAgent() == null) {
+			
+			customUserAgentCheckBox.setSelected(false);
+  			customUserAgentTextField.setEnabled(false);
+  			customUserAgentTextField.setText("(Auto)");
+
+		} else {
+
+			customUserAgentCheckBox.setSelected(true);
+  			customUserAgentTextField.setEnabled(true);
+  			customUserAgentTextField.setText(te.getCustomUserAgent());
+		}
 
 		customClientDialog.pack();
 		customClientDialog.setLocationRelativeTo(null);
 		customClientDialog.setVisible(true);
+		customClientDialog.repaint();
 	}
 
 	/**
@@ -1686,7 +1754,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 			try {
 
-				te.settConn(new TrackerConnect(tInfo, te.getPort()));
+				te.settConn(new TrackerConnect(tInfo, te.getPort(), te.getCustomUserAgent()));
 				tc = te.gettConn();
 				String announce = String.format("%s?info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.announce, tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), tc.port);
 				te.getNumAnnouce().add(announce);
@@ -1851,9 +1919,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 
 	/**
 	 * This class serves to change the DefaultListCellrenderer of a JList to one that can display a JLabel with
-	 * and icon. The Icon has the ability to change depending on the prgrams current state
+	 * and icon. The Icon has the ability to change depending on the programs current state
 	 */
-	public class customRenderer extends DefaultListCellRenderer {
+	private class customRenderer extends DefaultListCellRenderer {
 		
 		@Override
 		public Component getListCellRendererComponent(JList l, Object val, int index, boolean isSelected, boolean cellHasFocus) {
@@ -1897,6 +1965,7 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JPanel WindowPanel;
         private javax.swing.JMenuItem aboutMenuItem;
         private javax.swing.JButton announceButton;
+        private javax.swing.ButtonGroup buttonGroup1;
         private javax.swing.JButton changeClientCancelButton;
         private javax.swing.JMenu changeClientMenu;
         private javax.swing.JButton changeClientOkButton;
@@ -1912,6 +1981,8 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JButton connectButton;
         private javax.swing.JDialog customClientDialog;
         private javax.swing.JMenuItem customClientMenu;
+        private javax.swing.JCheckBox customUserAgentCheckBox;
+        private javax.swing.JTextField customUserAgentTextField;
         private javax.swing.JLabel date;
         private javax.swing.JLabel downloaded;
         private javax.swing.JButton errorsButton;
