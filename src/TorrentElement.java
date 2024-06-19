@@ -21,6 +21,7 @@ public class TorrentElement {
 	private int timeLeft;			//int to keep track of the number of seconds left to send the upload/download data
 	private int uploadSent;			//int that keeps track of how much spoofed upload data has been recieved by the tracker
 	private String port;			//String to keep track of what port the program will report its using to the tracker
+	private String customUserAgent;		//String set a custom user agent
 	private Timer timer;			//object that represents a new thread to perform the upload
 	private TorrentInfo tInfo;		//object that contains all relevent torrent info
 	private TrackerConnect tConn;		//object that represents the spoofed upload info to send
@@ -36,13 +37,24 @@ public class TorrentElement {
 		this.timeLeft = 0;
 		this.uploadSent = 0;
 		this.port = "6881";
+		this.customUserAgent = null;
 		this.numAnnouce = new ArrayList<>();
 		this.errorMsg = new ArrayList<>();
+	}
+
+	public String getCustomUserAgent() {
+
+		return customUserAgent;
 	}
 
 	public int getUploadSent() {
 		
 		return uploadSent;
+	}
+
+	public void setCustomUserAgent(String customUserAgent) {
+	
+		this.customUserAgent = customUserAgent;
 	}
 
 	public String getPort() {
