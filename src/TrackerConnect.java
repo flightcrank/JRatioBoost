@@ -5,7 +5,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 
-//class to connect to a remore torrent tracker and issue HTML GET requests
+//class to connect to a remote torrent tracker and issue HTML GET requests
 class TrackerConnect {
 	
 	public String seeders;
@@ -13,14 +13,16 @@ class TrackerConnect {
 	public String interval;
 	public String minInterval;
 	public String port;
+	public String customUserAgent;
 	public boolean valid;
 	public TorrentInfo tInfo;
 
-	TrackerConnect(TorrentInfo tInfo, String port) throws MalformedURLException, IOException, Exception {
+	TrackerConnect(TorrentInfo tInfo, String port, String userAgent) throws MalformedURLException, IOException, Exception {
 	
 		this.tInfo = tInfo;
 		this.valid = false;
 		this.port = port;
+		this.customUserAgent = userAgent;
 		connect();
 	}
 
@@ -36,8 +38,6 @@ class TrackerConnect {
 		
 		String queryString = String.format("info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), this.port);
 		String request = String.format("%s%s%s", tInfo.announce, q, queryString);
-		
-		System.out.println(request);
 		
 		this.doRequest(request);
 	}
@@ -61,6 +61,15 @@ class TrackerConnect {
 		URL tracker;
 		URLConnection conn = null;
 		String userAgent = getUserAgent();
+
+		if (this.customUserAgent != null) {
+			
+			userAgent = this.customUserAgent;
+			System.out.println("using custom UA " + userAgent);
+		} else {
+
+			System.out.println("NOT using custom UA " + userAgent);
+		}
 		
 		//connect to torrent tracker
 		tracker = new URL(request);
