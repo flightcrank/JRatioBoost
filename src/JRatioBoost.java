@@ -448,6 +448,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
+                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
                 msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
                         public void componentShown(java.awt.event.ComponentEvent evt) {
                                 msgDialogComponentShown(evt);
@@ -1829,7 +1830,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		public void run() {
 			
 			int upSpeed = te.getUploadSpeed();
-			int n = te.getUploadAmount();
+			long n = te.getUploadAmount();
 			te.setUploadAmount(n += SizeConvert.KBToB(upSpeed));
 			
 			if (te.getIndex() == indexSelected) {
@@ -1858,7 +1859,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 					tc.connect(String.format("%d", te.getUploadAmount()), "0");
 
 					//keep track if the amount of spoofed uploads that has been sent so far
-					int num = te.getUploadSent() + (te.getUploadAmount() - te.getUploadSent());
+					long num = te.getUploadSent() + (te.getUploadAmount() - te.getUploadSent());
 					te.setUploadSent(num);
 
 					//add a new announcement to the list

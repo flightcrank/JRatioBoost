@@ -14,12 +14,12 @@ import java.util.Timer;
 public class TorrentElement {
 	
 	private int index;			//int that represents the object index in an array	
-	private int uploadAmount;		//int to keep track of how much has been uploaded
-	private int downloadAmount;		//int to keep track of how much has been downloaded
+	private long uploadAmount;		//int to keep track of how much has been uploaded
+	private long downloadAmount;		//int to keep track of how much has been downloaded
 	private int uploadSpeed;		//int to set the simulated speed of the upload
 	private int downloadSpeed;		//int to set the simulated speed of the downloaded
 	private int timeLeft;			//int to keep track of the number of seconds left to send the upload/download data
-	private int uploadSent;			//int that keeps track of how much spoofed upload data has been recieved by the tracker
+	private long uploadSent;		//int that keeps track of how much spoofed upload data has been recieved by the tracker
 	private String port;			//String to keep track of what port the program will report its using to the tracker
 	private String customUserAgent;		//String set a custom user agent
 	private Timer timer;			//object that represents a new thread to perform the upload
@@ -47,7 +47,7 @@ public class TorrentElement {
 		return customUserAgent;
 	}
 
-	public int getUploadSent() {
+	public long getUploadSent() {
 		
 		return uploadSent;
 	}
@@ -67,7 +67,7 @@ public class TorrentElement {
 		this.port = port;
 	}
 
-	public void setUploadSent(int uploadSent) {
+	public void setUploadSent(long uploadSent) {
 
 		this.uploadSent = uploadSent;
 	}
@@ -122,12 +122,12 @@ public class TorrentElement {
 		this.downloadSpeed = downloadSpeed;
 	}
 
-	public void setUploadAmount(int uploadAmount) {
+	public void setUploadAmount(long uploadAmount) {
 		
 		this.uploadAmount = uploadAmount;
 	}
 
-	public void setDownloadAmount(int downloadAmount) {
+	public void setDownloadAmount(long downloadAmount) {
 
 		this.downloadAmount = downloadAmount;
 	}
@@ -172,12 +172,12 @@ public class TorrentElement {
 		return index;
 	}
 
-	public int getUploadAmount() {
+	public long getUploadAmount() {
 
 		return uploadAmount;
 	}
 
-	public int getDownloadAmount() {
+	public long getDownloadAmount() {
 
 		return downloadAmount;
 	}
