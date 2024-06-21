@@ -1233,7 +1233,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		try {
 			
 			uploadSpeedSpinner.commitEdit();
-			
+
 		} catch (ParseException ex) {
 			
 			System.out.println(ex);
@@ -1514,6 +1514,11 @@ public class JRatioBoost extends javax.swing.JFrame {
 		msgDialog.repaint();
         }//GEN-LAST:event_msgDialogComponentShown
 
+	/**
+	 * This function is triggered when the user clicks on a JCheckBox in the Change Tracker dialog.
+	 * based on the selection is changes text in the JTexField
+	 * @param evt 
+	 */
         private void customUserAgentCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customUserAgentCheckBoxActionPerformed
 		
 		if (customUserAgentCheckBox.isSelected()) {
@@ -1665,7 +1670,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		customClientDialog.setVisible(true);
 		customClientDialog.repaint();
 	}
-
+	
 	/**
 	 * This is the main entry point to JRatioBoost
 	 * @param args a String array of torrent files to open at once
@@ -1802,7 +1807,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 	/**
 	 * This is an inner class that represents a thread that preforms calculations periodically (once a second). 
 	 * After a certain time threshold is reached, the thread will send the spoofed data is has been calculating to the 
-	 * torrent tracker. The thread will stop when the user presses the stop button, or an error has occured when 
+	 * torrent tracker. The thread will stop when the user presses the stop button, or an error has occurred when 
 	 * making a connection to the tracker 
 	 */
 	private class UpdateTask extends TimerTask {
