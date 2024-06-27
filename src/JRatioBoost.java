@@ -136,9 +136,6 @@ public class JRatioBoost extends javax.swing.JFrame {
                 errorsButton = new javax.swing.JButton();
                 uploadsSentButton = new javax.swing.JButton();
                 announceButton = new javax.swing.JButton();
-                openPanel = new javax.swing.JPanel();
-                torrent_name = new javax.swing.JLabel();
-                openFileButton = new javax.swing.JButton();
                 jPanel2 = new javax.swing.JPanel();
                 TorrentDataPanel = new javax.swing.JPanel();
                 InfoPanel = new javax.swing.JPanel();
@@ -172,6 +169,9 @@ public class JRatioBoost extends javax.swing.JFrame {
                 //connectButton.setHorizontalTextPosition(textPosition);
                 jArrow1 = new JArrow();
                 jLabel6 = new javax.swing.JLabel();
+                openPanel = new javax.swing.JPanel();
+                torrent_name = new javax.swing.JLabel();
+                openFileButton = new javax.swing.JButton();
 
                 jPopupMenu1.setFont(new java.awt.Font("Noto Sans Regular", 0, 17)); // NOI18N
                 jPopupMenu1.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -250,6 +250,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 updateIntervalDialog.setTitle("Change Update Interval");
                 updateIntervalDialog.setIconImage(this.img.getImage());
+                updateIntervalDialog.setPreferredSize(new java.awt.Dimension(350, 200));
 
                 jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel7.setLayout(new java.awt.BorderLayout());
@@ -299,6 +300,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 changePortDialog.setTitle("Change Port");
                 changePortDialog.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
                 changePortDialog.setIconImage(this.img.getImage());
+                changePortDialog.setPreferredSize(new java.awt.Dimension(351, 201));
 
                 jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel8.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
@@ -348,7 +350,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 customClientDialog.setTitle("Custom Client");
                 customClientDialog.setIconImage(this.img.getImage());
-                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 350));
+                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 300));
 
                 jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel13.setLayout(new java.awt.BorderLayout());
@@ -448,7 +450,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
+                msgDialog.setPreferredSize(new java.awt.Dimension(650, 450));
                 msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
                         public void componentShown(java.awt.event.ComponentEvent evt) {
                                 msgDialogComponentShown(evt);
@@ -522,6 +524,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jToolBar1.setFloatable(false);
                 jToolBar1.setRollover(true);
                 jToolBar1.setBorderPainted(false);
+                jToolBar1.setMargin(new java.awt.Insets(5, 0, 0, 0));
                 jToolBar1.setName("infoToolBar"); // NOI18N
 
                 errorsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/exclamation.png"))); // NOI18N
@@ -571,28 +574,6 @@ public class JRatioBoost extends javax.swing.JFrame {
                 listPanel.add(toolBar, java.awt.BorderLayout.SOUTH);
 
                 WindowPanel.add(listPanel, java.awt.BorderLayout.WEST);
-
-                openPanel.setLayout(new java.awt.BorderLayout());
-
-                torrent_name.setFont(torrent_name.getFont().deriveFont(torrent_name.getFont().getSize()+10f));
-                torrent_name.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
-                torrent_name.setPreferredSize(new java.awt.Dimension(300, 0));
-                openPanel.add(torrent_name, java.awt.BorderLayout.CENTER);
-
-                openFileButton.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
-                openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-horizontal-open.png"))); // NOI18N
-                openFileButton.setText("Open Torrent");
-                openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
-                openFileButton.setIconTextGap(5);
-                openFileButton.setPreferredSize(new java.awt.Dimension(250, 40));
-                openFileButton.addActionListener(new java.awt.event.ActionListener() {
-                        public void actionPerformed(java.awt.event.ActionEvent evt) {
-                                openFileButtonActionPerformed(evt);
-                        }
-                });
-                openPanel.add(openFileButton, java.awt.BorderLayout.WEST);
-
-                WindowPanel.add(openPanel, java.awt.BorderLayout.NORTH);
 
                 jPanel2.setLayout(new java.awt.BorderLayout());
 
@@ -915,6 +896,28 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel2.add(ConnectPanel, java.awt.BorderLayout.SOUTH);
 
                 WindowPanel.add(jPanel2, java.awt.BorderLayout.CENTER);
+
+                openPanel.setLayout(new java.awt.BorderLayout());
+
+                torrent_name.setFont(torrent_name.getFont().deriveFont(torrent_name.getFont().getSize()+10f));
+                torrent_name.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 10, 0, 0));
+                torrent_name.setPreferredSize(new java.awt.Dimension(300, 0));
+                openPanel.add(torrent_name, java.awt.BorderLayout.CENTER);
+
+                openFileButton.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-horizontal-open.png"))); // NOI18N
+                openFileButton.setText("Open Torrent");
+                openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+                openFileButton.setIconTextGap(5);
+                openFileButton.setPreferredSize(new java.awt.Dimension(250, 40));
+                openFileButton.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                                openFileButtonActionPerformed(evt);
+                        }
+                });
+                openPanel.add(openFileButton, java.awt.BorderLayout.WEST);
+
+                WindowPanel.add(openPanel, java.awt.BorderLayout.NORTH);
 
                 getContentPane().add(WindowPanel, java.awt.BorderLayout.CENTER);
 
@@ -1432,6 +1435,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			msgEditorPane.setText("<center><br /><font size =\"5\">There have been no errors !</center></font><br />");
 		}
 		
+		msgEditorPane.setCaretPosition(0);
 		msgLabel.setText("<html><h1>Error Messages</h2></html>");
 		msgLabel.setIcon(new ImageIcon(getClass().getResource("/icons/icons-32/exclamation.png")));
 		msgDialog.setTitle("Error Messages");
@@ -1495,6 +1499,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			
 		}
 		
+		msgEditorPane.setCaretPosition(0);
 		msgLabel.setIcon(new ImageIcon(getClass().getResource("/icons/icons-32/megaphone.png")));
 		msgLabel.setText("<html><h1>Announcements</h2></html>");
 		msgDialog.setTitle("Announcements");

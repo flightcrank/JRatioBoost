@@ -1,6 +1,8 @@
 
 # 🚀 JRatioBoost
 
+![Static Badge](https://img.shields.io/badge/Java-Version%208%2B-orange?style=flat)
+
 JRatioBoost is now at version 2.0. It is used to spoof uploads to private torrent trackers.
 It will simply report to the torrent tracker that you are uploading, when you are really uploading nothing at all.
 This will give you a good "ratio" on any private tracker that you use. It will work on any major operating system as long as
