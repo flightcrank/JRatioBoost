@@ -245,12 +245,13 @@ public class JRatioBoost extends javax.swing.JFrame {
                 });
 
                 jFileChooser1.setDialogTitle("Open Torrents");
+                jFileChooser1.setFileFilter(null);
                 jFileChooser1.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
                 jFileChooser1.setPreferredSize(new java.awt.Dimension(700, 500));
 
                 updateIntervalDialog.setTitle("Change Update Interval");
                 updateIntervalDialog.setIconImage(this.img.getImage());
-                updateIntervalDialog.setPreferredSize(new java.awt.Dimension(350, 200));
+                updateIntervalDialog.setPreferredSize(new java.awt.Dimension(400, 300));
 
                 jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel7.setLayout(new java.awt.BorderLayout());
@@ -300,7 +301,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 changePortDialog.setTitle("Change Port");
                 changePortDialog.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
                 changePortDialog.setIconImage(this.img.getImage());
-                changePortDialog.setPreferredSize(new java.awt.Dimension(351, 201));
+                changePortDialog.setPreferredSize(new java.awt.Dimension(400, 200));
 
                 jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel8.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
@@ -350,7 +351,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 customClientDialog.setTitle("Custom Client");
                 customClientDialog.setIconImage(this.img.getImage());
-                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 300));
+                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 350));
 
                 jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel13.setLayout(new java.awt.BorderLayout());
@@ -450,7 +451,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(650, 450));
+                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
                 msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
                         public void componentShown(java.awt.event.ComponentEvent evt) {
                                 msgDialogComponentShown(evt);
@@ -1075,8 +1076,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 			//Add the torrent opened to the JList
 			DefaultListModel mod = (DefaultListModel) torrentList.getModel();
 			mod.addElement(tInfo.name);
-	
-			int lastIndex = torrentList.getLastVisibleIndex();
+			
+			int lastIndex = mod.getSize() - 1;
+			//int lastIndex = torrentList.getLastVisibleIndex();
 			torrentList.setSelectedIndex(lastIndex);
 			//make the index of the sleceted list item global
 			indexSelected = lastIndex;
