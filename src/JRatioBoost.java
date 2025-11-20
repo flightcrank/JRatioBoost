@@ -1889,8 +1889,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				//from continuing to execute while the http request is being made
 				//by the TrackerConnect instance
 				timer.cancel();
-                                jCircleProgress1.setValue(0);
-
+                                
 				try {
 
 					//send get request to tracker with upload/download data
