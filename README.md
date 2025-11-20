@@ -13,7 +13,7 @@ I will continue to maintain this program. If there are any issues contact me and
 
 features...
 
-* 🆕 updated GUI (fugue icons by https://p.yusukekamiyamane.com/)
+* 🆕 updated GUI (new progress bar)
 * runs multiple torrents at a time
 * supports multiple .torrent files as command line arguments 
 * can open multiple .torrent files at once  
@@ -27,7 +27,7 @@ change log
 
 21/11/2025
 * added custom progress bar
-* fixed missting download label arrow icon
+* fixed missing download label arrow icon
 * supporting java version 21
 * dropping support for java 8 (might still work)
 
@@ -45,6 +45,9 @@ and follow the instructions on how to run the program
 [Releases Page](https://github.com/flightcrank/JRatioBoost/releases)
 
 ## Images 
+screenshot of version 2.1
+![swing screenshot 2](https://i.imgur.com/fygr4h4.png)
+
 screenshot of version 2.0
 ![swing screenshot 2](https://i.imgur.com/QJICBO5.png)
 
