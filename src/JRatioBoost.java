@@ -44,7 +44,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 		initComponents();
 		torrentList.setCellRenderer(new customRenderer());
 		torrentElement = new ArrayList<>();
-		jProgressBar1.setVisible(false);
+		jCircleProgress1.setVisible(false);
+               // jCircleProgress1.setOutline(false);
 		this.setIconImage(img.getImage());
 		this.pack();
 		loadArgs(args);
@@ -121,7 +122,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel1 = new javax.swing.JPanel();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 torrentList = new javax.swing.JList<>();
-                DefaultListModel demoList = new DefaultListModel();
+                DefaultListModel<String> demoList = new DefaultListModel<>();
                 torrentList.setModel(demoList);
 
                 torrentList.addListSelectionListener(new ListSelectionListener() {
@@ -160,7 +161,8 @@ public class JRatioBoost extends javax.swing.JFrame {
                 downloaded = new javax.swing.JLabel();
                 uploaded = new javax.swing.JLabel();
                 update = new javax.swing.JLabel();
-                jProgressBar1 = new javax.swing.JProgressBar();
+                jCircleProgress1 = new JCircleProgress();
+                jSeparator2 = new javax.swing.JSeparator();
                 ConnectPanel = new javax.swing.JPanel();
                 uploadSpeedSpinner = new javax.swing.JSpinner();
                 connectButton = new javax.swing.JButton();
@@ -251,7 +253,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 updateIntervalDialog.setTitle("Change Update Interval");
                 updateIntervalDialog.setIconImage(this.img.getImage());
-                updateIntervalDialog.setPreferredSize(new java.awt.Dimension(400, 300));
 
                 jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel7.setLayout(new java.awt.BorderLayout());
@@ -301,7 +302,6 @@ public class JRatioBoost extends javax.swing.JFrame {
                 changePortDialog.setTitle("Change Port");
                 changePortDialog.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
                 changePortDialog.setIconImage(this.img.getImage());
-                changePortDialog.setPreferredSize(new java.awt.Dimension(400, 200));
 
                 jPanel8.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel8.setFont(new java.awt.Font("Noto Sans", 0, 16)); // NOI18N
@@ -351,7 +351,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 customClientDialog.setTitle("Custom Client");
                 customClientDialog.setIconImage(this.img.getImage());
-                customClientDialog.setPreferredSize(new java.awt.Dimension(400, 350));
 
                 jPanel13.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
                 jPanel13.setLayout(new java.awt.BorderLayout());
@@ -451,7 +450,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 customClientDialog.getContentPane().add(jPanel13, java.awt.BorderLayout.CENTER);
 
                 msgDialog.setIconImage(this.img.getImage());
-                msgDialog.setPreferredSize(new java.awt.Dimension(600, 400));
+                msgDialog.setPreferredSize(new java.awt.Dimension(700, 400));
                 msgDialog.addComponentListener(new java.awt.event.ComponentAdapter() {
                         public void componentShown(java.awt.event.ComponentEvent evt) {
                                 msgDialogComponentShown(evt);
@@ -463,7 +462,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 msgLabel.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
                 msgLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-                msgLabel.setIcon(new javax.swing.ImageIcon("/home/karma/Downloads/icons/fugue-icons-3.5.6/bonus/icons-32/exclamation.png")); // NOI18N
                 msgLabel.setText("Errors");
                 msgLabel.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 10, 1));
                 msgLabel.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
@@ -614,7 +612,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 jLabel4.setFont(new java.awt.Font("Noto Sans", 1, 15)); // NOI18N
                 jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-                jLabel4.setIcon(new javax.swing.ImageIcon("/home/karma/Downloads/icons/fugue-icons-3.5.6/icons/edit-number.png")); // NOI18N
                 jLabel4.setText("Peer_ID");
                 jLabel4.setAlignmentX(0.5F);
                 jLabel4.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
@@ -735,7 +732,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 jLabel16.setFont(new java.awt.Font("Noto Sans", 1, 15)); // NOI18N
                 jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-                jLabel16.setIcon(new javax.swing.ImageIcon("/home/karma/Downloads/icons/fugue-icons-3.5.6/icons/arrow-270.png")); // NOI18N
+                jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrow-270.png"))); // NOI18N
                 jLabel16.setText("Downloads");
                 jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -766,8 +763,8 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 4;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel18, gridBagConstraints);
 
@@ -775,8 +772,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 seeders.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
                 OutputPanel.add(seeders, gridBagConstraints);
 
@@ -784,8 +780,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 leechers.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(leechers, gridBagConstraints);
 
@@ -793,8 +788,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 downloaded.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(downloaded, gridBagConstraints);
 
@@ -802,8 +796,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 uploaded.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(uploaded, gridBagConstraints);
 
@@ -814,24 +807,33 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.gridy = 4;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-                gridBagConstraints.weightx = 1.0;
-                gridBagConstraints.weighty = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(update, gridBagConstraints);
 
-                jProgressBar1.setFont(new java.awt.Font("Noto Sans Regular", 0, 14)); // NOI18N
-                jProgressBar1.setString("");
-                jProgressBar1.setStringPainted(true);
+                jCircleProgress1.setToolTipText("Time untill next update");
+                jCircleProgress1.setColour(new java.awt.Color(255, 153, 0));
+                jCircleProgress1.setDoubleBuffered(true);
+                jCircleProgress1.setString("");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 2;
-                gridBagConstraints.gridy = 4;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+                gridBagConstraints.gridy = 0;
+                gridBagConstraints.gridheight = 5;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-                gridBagConstraints.weightx = 1000.0;
+                gridBagConstraints.weightx = 1.0;
+                OutputPanel.add(jCircleProgress1, gridBagConstraints);
+
+                jSeparator2.setEnabled(false);
+                gridBagConstraints = new java.awt.GridBagConstraints();
+                gridBagConstraints.gridx = 0;
+                gridBagConstraints.gridy = 5;
+                gridBagConstraints.gridwidth = 3;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.weighty = 1.0;
-                OutputPanel.add(jProgressBar1, gridBagConstraints);
+                OutputPanel.add(jSeparator2, gridBagConstraints);
 
                 TorrentDataPanel.add(OutputPanel);
 
@@ -977,7 +979,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 	private void updateLabels(TorrentElement te) {
 
 		TorrentInfo tInfo = te.gettInfo();
-		TrackerConnect tConn = te.gettConn();
 		
 		//update Labels
 		Pattern p = Pattern.compile("//[a-z.]+");
@@ -1074,7 +1075,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			updateLabels(te);
 			
 			//Add the torrent opened to the JList
-			DefaultListModel mod = (DefaultListModel) torrentList.getModel();
+			DefaultListModel<String> mod = (DefaultListModel<String>) torrentList.getModel();
 			mod.addElement(tInfo.name);
 			
 			int lastIndex = mod.getSize() - 1;
@@ -1136,7 +1137,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		//if a new torrent file is open make sure the spinloader isn't active for a previous torrent
 		//that may be running. Also make sure the button is in its connect state. As a previous torrent that 
 		//is running with change it to its stopped state
-		jSpinLoader1.stop();
+//		jSpinLoader1.stop();
 		connectButton.setText("Connect");	
 		
 		//clear any old data from labels because a new file has been opened
@@ -1145,7 +1146,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		leechers.setText("");
 		downloaded.setText("");
 		update.setText("");
-		jProgressBar1.setVisible(false);
+		jCircleProgress1.setVisible(false);
 		uploadsSentButton.setText("0");
 		announceButton.setText("0");
 		errorsButton.setText("0");
@@ -1264,9 +1265,12 @@ public class JRatioBoost extends javax.swing.JFrame {
         private void changeUpdateOkButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeUpdateOkButtonActionPerformed
 		
 		TorrentElement te = torrentElement.get(indexSelected);
+		TrackerConnect tc = te.gettConn();
 		int sVal = (Integer) changeUpdateSpinner.getValue();
 		te.setTimeLeft(sVal);
+		tc.interval = Integer.toString(sVal);
 		updateIntervalDialog.setVisible(false);
+		
         }//GEN-LAST:event_changeUpdateOkButtonActionPerformed
 
 	/**
@@ -1559,7 +1563,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				TorrentInfo tInfo = te.gettInfo();
 				updateLabels(te);
 				uploadSpeedSpinner.setValue(te.getUploadSpeed());
-				jProgressBar1.setVisible(false);
+				jCircleProgress1.setVisible(false);
 				uploadsSentButton.setText(new SizeConvert(te.getUploadSent()).toString());
 				announceButton.setText(String.format("%d", te.getNumAnnouce().size()));
 				errorsButton.setText(String.format("%d", te.getErrorMsg().size() / 2));
@@ -1575,8 +1579,8 @@ public class JRatioBoost extends javax.swing.JFrame {
 					leechers.setText("");
 					downloaded.setText("");
 					update.setText("");
-					jProgressBar1.setValue(0);
-					jProgressBar1.setString(null);
+					jCircleProgress1.setValue(0);
+					jCircleProgress1.setString(null);
 			
 				} else {
 					
@@ -1620,6 +1624,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		updateIntervalDialog.pack();
 		updateIntervalDialog.setLocationRelativeTo(null);
 		updateIntervalDialog.setVisible(true);
+		System.out.println("test");
 	}
 
 	/**
@@ -1712,6 +1717,26 @@ public class JRatioBoost extends javax.swing.JFrame {
 			}
 		});
 	}
+
+	public static String formatSeconds(long totalSeconds) {
+		
+		final long SECONDS_PER_MINUTE = 60;
+		final long SECONDS_PER_HOUR = 3600;
+
+		// Calculate hours
+		long hours = totalSeconds / SECONDS_PER_HOUR;
+		
+		// Calculate remaining seconds after hours are accounted for
+		long remainingSeconds = totalSeconds % SECONDS_PER_HOUR;
+		
+		// Calculate minutes from the remaining seconds
+		long minutes = remainingSeconds / SECONDS_PER_MINUTE;
+		
+		// Calculate seconds from the final remainder
+		long seconds = remainingSeconds % SECONDS_PER_MINUTE;
+
+	        return String.format("%02d:%02d", minutes, seconds);
+    }
 	
 	/**
 	 * This inner class is dynamically added as an ActionListener object to JMenuItems. It is used so the user can 
@@ -1853,9 +1878,9 @@ public class JRatioBoost extends javax.swing.JFrame {
 				update.setText(tc.interval);
 				downloaded.setText("100%");
 				uploaded.setText(new SizeConvert(te.getUploadAmount()).toString());
-				jProgressBar1.setVisible(true);
 				announceButton.setText("" + te.getNumAnnouce().size());
 				uploadsSentButton.setText(new SizeConvert(te.getUploadSent()).toString());
+				jCircleProgress1.setVisible(true);
 			}
 
 			if (te.getTimeLeft() <= 0) {
@@ -1864,6 +1889,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 				//from continuing to execute while the http request is being made
 				//by the TrackerConnect instance
 				timer.cancel();
+                                jCircleProgress1.setValue(0);
 
 				try {
 
@@ -1909,20 +1935,17 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                         }
 			
-			int total = Integer.parseInt(tc.interval);
+                        int total = Integer.parseInt(tc.interval);
 			int num = total - te.getTimeLeft();
-			
-			//percentage of time left until the next update is preformed
-			float pc = (float) num / total;
-			
-			//only update the progress bar for the currently selected torrent, otherwise all running torrents
+			String timeLeft = JRatioBoost.formatSeconds(te.getTimeLeft());
+
+                        //only update the progress bar for the currently selected torrent, otherwise all running torrents
 			//would be updating the same progress bar at the same time
 			if (te.getIndex() == indexSelected) {
 				
-				int max = jProgressBar1.getMaximum();
-				float v = pc * max;
-				jProgressBar1.setValue((int) v);
-				jProgressBar1.setString(String.format("%d/%d", num, total));
+                            jCircleProgress1.setMaximum(total);
+                            jCircleProgress1.setValue(num);
+                            jCircleProgress1.setString(timeLeft);
 			}
 			
 			//update the variable that determines how much time is left for the selected torrent until it updates
@@ -2002,6 +2025,7 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JLabel info_hash;
         private JArrow jArrow1;
         private javax.swing.JButton jButton2;
+        private JCircleProgress jCircleProgress1;
         private javax.swing.JFileChooser jFileChooser1;
         private javax.swing.JLabel jLabel1;
         private javax.swing.JLabel jLabel10;
@@ -2032,10 +2056,10 @@ public class JRatioBoost extends javax.swing.JFrame {
         private javax.swing.JPanel jPanel8;
         private javax.swing.JPanel jPanel9;
         private javax.swing.JPopupMenu jPopupMenu1;
-        private javax.swing.JProgressBar jProgressBar1;
         private javax.swing.JScrollPane jScrollPane1;
         private javax.swing.JScrollPane jScrollPane2;
         private javax.swing.JSeparator jSeparator1;
+        private javax.swing.JSeparator jSeparator2;
         private JSpinLoader jSpinLoader1;
         private javax.swing.JToolBar jToolBar1;
         private javax.swing.JMenuItem kTorrentMenuItem;

@@ -66,13 +66,12 @@ class TrackerConnect {
 			
 			userAgent = this.customUserAgent;
 		} 
-
 		
 		//connect to torrent tracker
 		tracker = new URL(request);
 		conn = tracker.openConnection();
 		conn.setRequestProperty("User-Agent", userAgent);
-				
+		
 		if (conn != null) {
 
 			Blex blex = responce(conn);
