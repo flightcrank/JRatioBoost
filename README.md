@@ -1,9 +1,9 @@
 
 # 🚀 JRatioBoost
 
-![Static Badge](https://img.shields.io/badge/Java-Version%208%2B-orange?style=flat)
+![Static Badge](https://img.shields.io/badge/java-version%2021-orange?style=flat)
 
-JRatioBoost is now at version 2.0. It is used to spoof uploads to private torrent trackers.
+JRatioBoost is now at version 2.1. It is used to spoof uploads to private torrent trackers.
 It will simply report to the torrent tracker that you are uploading, when you are really uploading nothing at all.
 This will give you a good "ratio" on any private tracker that you use. It will work on any major operating system as long as
 Java is installed on that system.
@@ -13,15 +13,23 @@ I will continue to maintain this program. If there are any issues contact me and
 
 features...
 
-* 🆕 runs multiple torrents at a time
-* 🆕 supports multiple .torrent files as command line arguments 
-* 🆕 can open multiple .torrent files at once  
 * 🆕 updated GUI (fugue icons by https://p.yusukekamiyamane.com/)
+* runs multiple torrents at a time
+* supports multiple .torrent files as command line arguments 
+* can open multiple .torrent files at once  
 * spoofs multiple torrent clients (kTorrent, Transmission, uTorrent and more) choose any version number for any of them !
 * choose from any announce URL listed in the torrent file
 * change port number reported to tracker
 * runs on any operating system Yay for Linux users 🐧!
 * free and open source software !
+
+change log
+
+21/11/2025
+* added custom progress bar
+* fixed missting download label arrow icon
+* supporting java version 21
+* dropping support for java 8 (might still work)
 
 Compilation instructions are as follows... (browse to the src directory)
 

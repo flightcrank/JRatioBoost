@@ -15,7 +15,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * This is the JRatioBoost GUI program that spoofs uploads on private torrent trackers
  * 
  * @author Karma Chameleon
- * @version 2.0
+ * @version 2.1
  */
 public class JRatioBoost extends javax.swing.JFrame {
 	
@@ -1599,7 +1599,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 	private void aboutMenuItemActionPerformed(java.awt.event.ActionEvent evt) {
 		
 		String ver = System.getProperty("java.version");
-		String line = String.format("<font size=\"5\"><br /><b>Version:</b> 2.0<br /><b>Author:</b> Karma Chameleon<br /><b>Web site:</b> https://gitlab.com/karma_chameleon/j-ratio-boost<br/><b>Fugue Icons by:</b> https://p.yusukekamiyamane.com/<br /><br /><b>Java Version: </b>%s</font><br />", ver);
+		String line = String.format("<font size=\"5\"><br /><b>Version:</b> 2.1<br /><b>Author:</b> Karma Chameleon<br /><b>Web site:</b> https://gitlab.com/karma_chameleon/j-ratio-boost<br/><b>Fugue Icons by:</b> https://p.yusukekamiyamane.com/<br /><br /><b>Java Version: </b>%s</font><br />", ver);
 		
 		msgEditorPane.setText(line);
 		msgLabel.setText("<html><h1>JRatioBoost</h2></html>");
