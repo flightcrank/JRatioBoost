@@ -31,8 +31,6 @@ change log
 * improved error checking
 * added custom progress bar
 * fixed missing download label arrow icon
-* supporting java version 21
-* dropping support for java 8 (might still work)
 
 Compilation instructions are as follows... (browse to the src directory)
 
