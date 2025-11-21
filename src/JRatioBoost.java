@@ -6,6 +6,7 @@ import java.net.*;
 import java.text.*;
 import java.util.*;
 import java.util.Timer;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -122,7 +123,7 @@ public class JRatioBoost extends javax.swing.JFrame {
                 jPanel1 = new javax.swing.JPanel();
                 jScrollPane1 = new javax.swing.JScrollPane();
                 torrentList = new javax.swing.JList<>();
-                DefaultListModel<String> demoList = new DefaultListModel<>();
+                DefaultListModel demoList = new DefaultListModel();
                 torrentList.setModel(demoList);
 
                 torrentList.addListSelectionListener(new ListSelectionListener() {
@@ -732,7 +733,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 jLabel16.setFont(new java.awt.Font("Noto Sans", 1, 15)); // NOI18N
                 jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-                jLabel16.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/arrow-270.png"))); // NOI18N
+                jLabel16.setIcon(new javax.swing.ImageIcon("/home/karma/Code/java/j-ratio-boost/src/icons/arrow-270.png")); // NOI18N
                 jLabel16.setText("Downloads");
                 jLabel16.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 gridBagConstraints = new java.awt.GridBagConstraints();
@@ -763,65 +764,77 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 4;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
                 gridBagConstraints.insets = new java.awt.Insets(0, 5, 5, 0);
                 OutputPanel.add(jLabel18, gridBagConstraints);
 
                 seeders.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                seeders.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 seeders.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(10, 10, 5, 5);
                 OutputPanel.add(seeders, gridBagConstraints);
 
                 leechers.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                leechers.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 leechers.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(leechers, gridBagConstraints);
 
                 downloaded.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                downloaded.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 downloaded.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(downloaded, gridBagConstraints);
 
                 uploaded.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                uploaded.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 uploaded.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(uploaded, gridBagConstraints);
 
                 update.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
+                update.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
                 update.setVerticalAlignment(javax.swing.SwingConstants.TOP);
                 update.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 update.setIconTextGap(5);
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 1;
                 gridBagConstraints.gridy = 4;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
+                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.insets = new java.awt.Insets(0, 10, 5, 5);
                 OutputPanel.add(update, gridBagConstraints);
 
-                jCircleProgress1.setToolTipText("Time untill next update");
                 jCircleProgress1.setColour(new java.awt.Color(255, 153, 0));
-                jCircleProgress1.setDoubleBuffered(true);
                 jCircleProgress1.setString("");
                 gridBagConstraints = new java.awt.GridBagConstraints();
                 gridBagConstraints.gridx = 2;
                 gridBagConstraints.gridy = 0;
                 gridBagConstraints.gridheight = 5;
                 gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-                gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-                gridBagConstraints.weightx = 1.0;
+                gridBagConstraints.anchor = java.awt.GridBagConstraints.EAST;
+                gridBagConstraints.weightx = 20.0;
                 OutputPanel.add(jCircleProgress1, gridBagConstraints);
 
                 jSeparator2.setEnabled(false);
@@ -829,9 +842,8 @@ public class JRatioBoost extends javax.swing.JFrame {
                 gridBagConstraints.gridx = 0;
                 gridBagConstraints.gridy = 5;
                 gridBagConstraints.gridwidth = 3;
-                gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+                gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
                 gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-                gridBagConstraints.weightx = 1.0;
                 gridBagConstraints.weighty = 1.0;
                 OutputPanel.add(jSeparator2, gridBagConstraints);
 
@@ -909,7 +921,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 
                 openFileButton.setFont(new java.awt.Font("Noto Sans", 0, 14)); // NOI18N
                 openFileButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/folder-horizontal-open.png"))); // NOI18N
-                openFileButton.setText("Open Torrent");
+                openFileButton.setText("Open Torrent(s)");
                 openFileButton.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
                 openFileButton.setIconTextGap(5);
                 openFileButton.setPreferredSize(new java.awt.Dimension(250, 40));
@@ -1137,7 +1149,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 		//if a new torrent file is open make sure the spinloader isn't active for a previous torrent
 		//that may be running. Also make sure the button is in its connect state. As a previous torrent that 
 		//is running with change it to its stopped state
-//		jSpinLoader1.stop();
+		jSpinLoader1.stop();
 		connectButton.setText("Connect");	
 		
 		//clear any old data from labels because a new file has been opened
@@ -1186,6 +1198,7 @@ public class JRatioBoost extends javax.swing.JFrame {
 			te.setUploadAmount(0);
 			connectButton.setText("Connecting..");
 			jSpinLoader1.start();
+			WindowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
 			//connect to tracker in a different thread so it wont
 			//stop the GUI from responding while the TrackerConnect object
@@ -1624,7 +1637,6 @@ public class JRatioBoost extends javax.swing.JFrame {
 		updateIntervalDialog.pack();
 		updateIntervalDialog.setLocationRelativeTo(null);
 		updateIntervalDialog.setVisible(true);
-		System.out.println("test");
 	}
 
 	/**
@@ -1786,32 +1798,12 @@ public class JRatioBoost extends javax.swing.JFrame {
 		
 		//execute this method in its own background thread
 		@Override
-		public Void doInBackground() {
-
-			WindowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-			try {
-
-				te.settConn(new TrackerConnect(tInfo, te.getPort(), te.getCustomUserAgent()));
-				tc = te.gettConn();
-				String announce = String.format("%s?info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.announce, tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), tc.port);
-				te.getNumAnnouce().add(announce);
-
-			} catch (MalformedURLException ex) {
-
-				JOptionPane.showMessageDialog(WindowPanel, "Error: Malformed URL. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction(te.getIndex());
-
-			} catch (IOException ex) {
-
-				JOptionPane.showMessageDialog(WindowPanel, "Error: IO error. " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction(te.getIndex());
-
-			} catch (Exception ex) {
-
-				JOptionPane.showMessageDialog(WindowPanel, "Error: " + ex, "Error message", JOptionPane.ERROR_MESSAGE);
-				stopAction(te.getIndex());
-			}
+		public Void doInBackground() throws Exception {
+			
+			te.settConn(new TrackerConnect(tInfo, te.getPort(), te.getCustomUserAgent()));
+			tc = te.gettConn();
+			String announce = String.format("%s?info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", tInfo.announce, tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), tc.port);
+			te.getNumAnnouce().add(announce);
 
 			return null;
 		}
@@ -1820,19 +1812,69 @@ public class JRatioBoost extends javax.swing.JFrame {
 		//background thread has finished executing its statements
 		@Override
 		protected void done() {
+		
+			try {
+				try {
+					
+					get(); // Only call get() to re-throw any exceptions from doInBackground()
+				
+					System.out.println("Connection successful");
+					
+					//valid connection made
+					if (tc != null && tc.valid == true) {
 
-			WindowPanel.setCursor(null);
+						connectButton.setText("Stop");
 
-			//valid connection made
-			if (tc != null && tc.valid == true) {
+						//send request at regular intervals
+						te.setTimer(new Timer());
+						te.getTimer().scheduleAtFixedRate(new UpdateTask(te), 1000, 1000);
+						torrentList.repaint();
+					}
+					
+				} catch (InterruptedException e) {
+				
+					String errorMsg = "A InterruptedException error occurred: ";
+					
+					JOptionPane.showMessageDialog(WindowPanel, errorMsg, "Error message", JOptionPane.ERROR_MESSAGE);
 
-				connectButton.setText("Stop");
-
-				//send request at regular intervals
-				te.setTimer(new Timer());
-				te.getTimer().scheduleAtFixedRate(new UpdateTask(te), 1000, 1000);
-				torrentList.repaint();
-			}
+				} catch (ExecutionException e) {
+					
+					Throwable cause = e.getCause(); // Get the original exception
+					String errorMsg;
+					
+					if (cause instanceof MalformedURLException) {
+						
+						// Check specifically for the MalformedURLException
+						errorMsg = "URL Error: The tracker URL is not properly formatted.\n" + cause.getMessage();
+						JOptionPane.showMessageDialog(WindowPanel, errorMsg, "Error message", JOptionPane.ERROR_MESSAGE);
+					
+					} else if (cause instanceof IOException) {
+						
+						// Catch other network/IO issues
+						errorMsg = "IO Error: Connection or read failed. \n" + cause.getMessage();
+						JOptionPane.showMessageDialog(WindowPanel, errorMsg, "Error message", JOptionPane.ERROR_MESSAGE);
+					    
+					} else if (cause instanceof Error) {
+						
+						// Catches severe issues like ExceptionInInitializerError
+						errorMsg = "Critical Error: JVM configuration issue. \n" + cause.getMessage();
+						JOptionPane.showMessageDialog(WindowPanel, errorMsg, "Error message", JOptionPane.ERROR_MESSAGE);
+					    
+					} else {
+					    
+						// Catch all other unexpected exceptions
+						errorMsg = "An unexpected error occurred: \n" + cause.getMessage();
+						JOptionPane.showMessageDialog(WindowPanel, errorMsg, "Error message", JOptionPane.ERROR_MESSAGE);
+					}
+				
+				}
+				
+			} finally {
+					
+				//will always run regradless of the outcome of the inner try or catch statements
+				WindowPanel.setCursor(null);
+				jSpinLoader1.timer.stop();
+			}	
 		}
 	}
 

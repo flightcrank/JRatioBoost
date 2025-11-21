@@ -51,7 +51,6 @@ class TrackerConnect {
 		
 		String queryString = String.format("info_hash=%s&peer_id=%s&port=%s&uploaded=%s&downloaded=%s&left=0&compact=1", tInfo.hexStringUrlEnc(0), tInfo.hexStringUrlEnc(1), this.port, uploaded, downloaded);
 		String request = String.format("%s%s%s", tInfo.announce, q, queryString);
-		System.out.println(request);
 		
 		this.doRequest(request);
 	}
@@ -72,21 +71,18 @@ class TrackerConnect {
 		conn = tracker.openConnection();
 		conn.setRequestProperty("User-Agent", userAgent);
 		
-		if (conn != null) {
-
-			Blex blex = responce(conn);
+		Blex blex = responce(conn);
+		
+		if (blex.valid) {
 			
-			if (blex.valid) {
-				
-				valid = true;
-				checkFailResponse(blex.tokenList);
-				setInfo(blex.tokenList);
+			valid = true;
+			checkFailResponse(blex.tokenList);
+			setInfo(blex.tokenList);
+		
+		} else {
 			
-			} else {
-				
-				valid = false;
-				throw new Exception("Invalid bencoded responce.");
-			}
+			valid = false;
+			throw new Exception("Invalid bencoded responce.");
 		}
 	}
 	
