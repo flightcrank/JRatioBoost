@@ -127,7 +127,7 @@ class TrackerConnect {
 				
 				this.valid = false;
 				String failReason = tokenList.get(i + 1).getValueString();
-				throw new Exception("\nTracker Failure Reason: " + failReason);
+				throw new Exception("\nTracker Failure Reason, " + failReason);
 			}
 		}
 	}

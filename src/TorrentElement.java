@@ -1,6 +1,6 @@
 
 import java.util.ArrayList;
-import java.util.Timer;
+import javax.swing.Timer;
 
 /**
  *
@@ -96,6 +96,7 @@ public class TorrentElement {
 		this.timeLeft = 0;
 		this.uploadSent = 0;
 		this.port = "6881";
+		this.timer = null;
 		this.customUserAgent = null;
 		this.numAnnouce = new ArrayList<>();
 		this.errorMsg = new ArrayList<>();

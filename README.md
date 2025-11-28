@@ -2,6 +2,7 @@
 # 🚀 JRatioBoost
 
 ![Static Badge](https://img.shields.io/badge/Supports%20Java-%208%20and%20above-orange)
+![GitHub Downloads](https://img.shields.io/github/downloads/flightcrank/jratioboost/total?style=flat&label=Downloaded)
 
 JRatioBoost is now at version 2.1. It is used to spoof uploads to private torrent trackers.
 It will simply report to the torrent tracker that you are uploading, when you are really uploading nothing at all.
@@ -43,6 +44,8 @@ that should compile all necessary .java files. to run the program type the comma
 If you just want to run the program, then go to "Releases" and download the latest version that it ready for use
 and follow the instructions on how to run the program
 
+[Releases Page](https://github.com/flightcrank/JRatioBoost/releases)
+
 NOTE: for users on openSuse or fedora based distros having trouble establishing a connection to **https** trackers. Changing
 this line in the java.security file from true to **false** should solve connection issues you may have on java 8.
 
@@ -52,14 +55,12 @@ to
 
 `security.useSystemPropertiesFile=false`
 
-[Releases Page](https://github.com/flightcrank/JRatioBoost/releases)
-
 ## Images 
 screenshot of version 2.1
-![swing screenshot 2](https://i.imgur.com/fygr4h4.png)
+![swing screenshot 3](https://i.imgur.com/fygr4h4.png)
 
 screenshot of version 2.0
 ![swing screenshot 2](https://i.imgur.com/QJICBO5.png)
 
 screenshot of previous version 1.0
-![swing screenshot](https://i.imgur.com/8G9l9Ra.png)
+![swing screenshot 1](https://i.imgur.com/8G9l9Ra.png)
