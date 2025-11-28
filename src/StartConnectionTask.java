@@ -57,7 +57,7 @@ public class StartConnectionTask extends SwingWorker<String, Void> {
 				
 				String announce = String.format("%s?info_hash=%s&peer_id=%s&port=%s&uploaded=0&downloaded=0&left=0&compact=1&event=started", te.gettInfo().announce, te.gettInfo().hexStringUrlEnc(0), te.gettInfo().hexStringUrlEnc(1), te.gettConn().port);
 				te.getNumAnnouce().add(announce);
-				System.out.println(result + ": " + te.getNumAnnouce().getLast());
+				System.out.println(result + ": " + te.getNumAnnouce().get(te.getNumAnnouce().size() - 1));
 				
 				//valid connection made
 				if (te.gettConn() != null && te.gettConn().valid == true) {

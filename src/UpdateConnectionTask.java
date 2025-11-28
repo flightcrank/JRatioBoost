@@ -69,7 +69,7 @@ public class UpdateConnectionTask extends SwingWorker <String, Void> {
 				
 				te.getTimer().start();
 				
-				System.out.println(result + ": " + te.getNumAnnouce());
+				System.out.println(result + ": " + te.getNumAnnouce().get(te.getNumAnnouce().size() - 1));
 		
 			} else {
 				
