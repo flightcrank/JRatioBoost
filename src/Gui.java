@@ -1571,7 +1571,7 @@ public class Gui extends javax.swing.JFrame {
 				jCircleProgress1.setVisible(false);
 				uploadsSentButton.setText(new SizeConvert(te.getUploadSent()).toString());
 				announceButton.setText(String.format("%d", te.getNumAnnouce().size()));
-				errorsButton.setText(String.format("%d", te.getErrorMsg().size() / 2));
+				errorsButton.setText(String.format("%d", te.getErrorMsg().size()));
 
 				if (te.getTimer() == null) {
 					
@@ -1687,42 +1687,6 @@ public class Gui extends javax.swing.JFrame {
 		customClientDialog.repaint();
 	}
 	
-	/**
-	 * This is the main entry point to JRatioBoost
-	 * @param args a String array of torrent files to open at once
-	 */
-//	public static void main(String args[]) {
-//
-//		SwingUtilities.invokeLater(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//
-//				//Use native look and feel
-//				try {
-//					//for Linux systems just use nimbus look and feel
-//					if (System.getProperty("os.name").equals("Linux")) {
-//
-//						//UIManager.setLookAndFeel("com.sun.java.swing.plaf.gtk.GTKLookAndFeel");
-//						UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-//
-//					} else {
-//
-//						//native l&f
-//						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//					}
-//
-//				} catch (Exception e) {
-//
-//					System.out.println(e);
-//				}
-//
-//				//create and show the Swing GUI
-//				new Gui(args).setVisible(true);
-//			}
-//		});
-//	}
-
 	public static String formatSeconds(long totalSeconds) {
 		
 		final long SECONDS_PER_MINUTE = 60;
